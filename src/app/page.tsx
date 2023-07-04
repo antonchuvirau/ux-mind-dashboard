@@ -5,8 +5,8 @@ import { MyHubstaffClient } from './api';
 
 export default async function Home() {
   const client = new MyHubstaffClient(
-    process.env.ACCESS_TOKEN,
-    process.env.REFRESH_TOKEN
+    process.env.ACCESS_TOKEN || '',
+    process.env.REFRESH_TOKEN || '',
   );
   const projects = await client.getProjects(
     process.env.ORGANIZATION_ID ? Number(process.env.ORGANIZATION_ID) : 0

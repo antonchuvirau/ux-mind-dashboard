@@ -1,15 +1,12 @@
 import Hubstaff from '@app-masters/hubstaff-node-client';
 
-const baseUrl = 'https://api.hubstaff.com/v2/';
-
-const refreshTokenCallback = (accessToken: any, refreshToken: any) => {
+const refreshTokenCallback = (accessToken: string, refreshToken: string) => {
   console.log('A new token has received');
   console.log('access token', accessToken);
   console.log('refresh token', refreshToken);
 };
 
 const ORGANIZATION_ID = process.env.ORGANIZATION_ID;
-const ACCESS_TOKEN = process.env.ACCESS_TOKEN;
 const REFRESH_TOKEN = process.env.REFRESH_TOKEN;
 
 class MyHubstaffClient extends Hubstaff {
@@ -35,7 +32,7 @@ class MyHubstaffClient extends Hubstaff {
     console.log(res);
     return res;
   };
-  constructor(accessToken: any, refreshToken: any) {
+  constructor(accessToken: string, refreshToken: string) {
     super({ accessToken, refreshToken }, refreshTokenCallback);
     //this.getToken();
   }
