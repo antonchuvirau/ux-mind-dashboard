@@ -9,8 +9,19 @@ const refreshTokenCallback = (accessToken: string, refreshToken: string) => {
 const ORGANIZATION_ID = process.env.ORGANIZATION_ID;
 const REFRESH_TOKEN = process.env.REFRESH_TOKEN;
 
-class MyHubstaffClient extends Hubstaff {
-  getToken = async () => {
+class HubstaffClient extends Hubstaff {
+  constructor() {
+    // TODO: validate env
+    super(
+      {
+        accessToken: process.env.ACCESS_TOKEN || '',
+        refreshToken: process.env.REFRESH_TOKEN || '',
+      },
+      refreshTokenCallback
+    );
+  }
+  // TODO: do we need this method?
+  async getToken() {
     const tokenObj = await Hubstaff.getAccessToken(
       REFRESH_TOKEN ? REFRESH_TOKEN : ''
     );
@@ -18,8 +29,8 @@ class MyHubstaffClient extends Hubstaff {
     console.log(tokenObj.accessToken);
     console.log('refreshToken');
     console.log(tokenObj.refreshToken);
-  };
-  getOrganizationUsers = async () => {
+  }
+  async getOrganizationUsers() {
     const members = await this.getOrganizationMembers(
       ORGANIZATION_ID ? Number(ORGANIZATION_ID) : 0
     );
@@ -31,11 +42,7 @@ class MyHubstaffClient extends Hubstaff {
     );
     console.log(res);
     return res;
-  };
-  constructor(accessToken: string, refreshToken: string) {
-    super({ accessToken, refreshToken }, refreshTokenCallback);
-    //this.getToken();
   }
 }
 
-export { MyHubstaffClient };
+export default HubstaffClient;
