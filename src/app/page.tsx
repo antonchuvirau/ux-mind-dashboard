@@ -1,6 +1,7 @@
 import ProjectsList from './components/ProjectsList';
 import MembersList from './components/MembersList';
 import ActivitiesList from './components/ActivitiesList';
+import ActivitiesSum from './components/ActivitiesSum';
 import HubstaffClient from './hubstaffClient';
 
 export const revalidate = 3600;
@@ -22,6 +23,7 @@ export default async function Home() {
   return (
     <>
       <main className="container mx-auto">
+        <ActivitiesSum activities={activities} />
         <ProjectsList projects={projects} />
         <MembersList members={members} />
         <ActivitiesList activities={activities} />
