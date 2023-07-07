@@ -18,7 +18,7 @@ const ActivitiesSum = ({ activities }: Props) => {
       <div className="text-primary mb-2 mt-0 text-5xl font-medium leading-tight">
         Hours tracked
       </div>
-      {trackedTime / 3600}
+      {Math.trunc(trackedTime / 3600)}
     </div>
   );
 };

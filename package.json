@@ -12,6 +12,7 @@
   "dependencies": {
     "@app-masters/hubstaff-node-client": "^2.0.4",
     "@prisma/client": "^4.16.2",
+    "@tanstack/react-table": "^8.9.3",
     "next": "13.4.6",
     "react": "18.2.0",
     "react-dom": "18.2.0"

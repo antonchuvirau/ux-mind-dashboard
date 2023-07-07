@@ -1,4 +1,12 @@
 import { type Project as HubstaffProject } from '@app-masters/hubstaff-node-client/dist/types';
+import {
+  ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  getPaginationRowModel,
+  useReactTable,
+  createColumnHelper,
+} from '@tanstack/react-table';
 
 interface Props {
   projects: HubstaffProject[];
