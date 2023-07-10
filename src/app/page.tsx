@@ -1,6 +1,6 @@
 import ProjectsList from './components/ProjectsList';
 import MembersList from './components/MembersList';
-// import ActivitiesList from './components/ActivitiesList';
+import ActivitiesList from './components/ActivitiesList';
 import ActivitiesSum from './components/ActivitiesSum';
 import HubstaffClient from './hubstaffClient';
 import AddProjectForm from './components/addProjectForm';
@@ -61,7 +61,7 @@ export default async function Home() {
         <ActivitiesSum activities={activities} />
         <ProjectsList projects={projects} />
         <MembersList members={members} />
-        {/*<ActivitiesList activities={activities} />*/}
+        <ActivitiesList activities={activities} />
       </main>
     </>
   );
