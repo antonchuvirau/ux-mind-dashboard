@@ -43,7 +43,7 @@ function Table<T>({
   }, [table, limit]);
 
   return (
-    <div className="overflow-x-auto max-w-full">
+    <div className="max-w-full overflow-x-auto">
       <table className="w-full whitespace-nowrap text-sm">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -51,7 +51,7 @@ function Table<T>({
               {headerGroup.headers.map((header) => (
                 <th
                   key={header.id}
-                  className="py-2 px-2 overflow-hidden text-ellipsis text-secondary"
+                  className="text-secondary overflow-hidden text-ellipsis px-2 py-2"
                   {...{
                     style: {
                       maxWidth: header.column.columnDef.maxSize || undefined,
@@ -77,7 +77,7 @@ function Table<T>({
               <tr
                 key={row.id}
                 onClick={() => onRowClick?.(row.original)}
-                className={`hover:bg-gray-200/50 cursor-pointer ${
+                className={`cursor-pointer hover:bg-gray-200/50 ${
                   rowIndex % 2 ? 'bg-gray-200/20' : ''
                 }`}
               >
@@ -91,21 +91,18 @@ function Table<T>({
                         width: cell.column.columnDef.size || undefined,
                       },
                     }}
-                    className="py-3 pl-2 pr-6 whitespace-nowrap overflow-hidden text-ellipsis"
+                    className="overflow-hidden text-ellipsis whitespace-nowrap py-3 pl-2 pr-6"
                   >
-                    {flexRender(
-                      cell.column.columnDef.cell,
-                      cell.getContext()
-                    )}
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}
               </tr>
             ))}
         </tbody>
       </table>
-      <div className="w-full flex justify-center mt-2 text-secondary">
+      <div className="text-secondary mt-2 flex w-full justify-center">
         <button
-          className="disabled:text-gray-300 disabled:cursor-not-allowed px-2 cursor-pointer"
+          className="cursor-pointer px-2 disabled:cursor-not-allowed disabled:text-gray-300"
           disabled={!table.getCanPreviousPage()}
           onClick={table.previousPage}
         >
@@ -129,10 +126,10 @@ function Table<T>({
           .map((pageIndex) => (
             <div
               key={pageIndex}
-              className={`px-3 cursor-pointer ${
+              className={`cursor-pointer px-3 ${
                 table.getState().pagination.pageIndex === pageIndex
-                ? 'text-primary'
-                : ''
+                  ? 'text-primary'
+                  : ''
               }`}
               onClick={() => table.setPageIndex(pageIndex)}
             >
@@ -140,7 +137,7 @@ function Table<T>({
             </div>
           ))}
         <button
-          className="disabled:text-gray-300 disabled:cursor-not-allowed px-2 cursor-pointer"
+          className="cursor-pointer px-2 disabled:cursor-not-allowed disabled:text-gray-300"
           disabled={!table.getCanNextPage()}
           onClick={table.nextPage}
         >

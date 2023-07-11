@@ -7,9 +7,7 @@ interface Props {
 const ActivitiesSum = ({ activities }: Props) => {
   const trackedTime = activities.reduce(
     (sum: number, activity: Activity) =>
-      activity.tracked
-      ? sum + activity.tracked
-      : sum,
+      activity.tracked ? sum + activity.tracked : sum,
     0
   );
 
