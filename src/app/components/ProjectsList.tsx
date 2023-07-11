@@ -27,8 +27,6 @@ const ProjectsList = ({ projects }: Props) => {
         Projects
       </div>
       <Table
-        title="project"
-        primaryField="project.name"
         data={projects}
         columns={columns}
       />

@@ -6,15 +6,13 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import _ from 'lodash';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 interface Props<T> {
   data: T[];
   columns: ColumnDef<T, any>[];
   onRowClick?: (row: T) => void;
-  title: string;
   isLoading?: boolean;
-  primaryField: string;
   limit?: number;
   paginationRange?: number;
 }
@@ -23,9 +21,7 @@ function Table<T>({
   data,
   isLoading,
   columns,
-  title,
   onRowClick,
-  primaryField,
   limit = 20,
   paginationRange = 5, // How many page links to show in pagination, should be odd number
 }: Props<T>) {
@@ -41,14 +37,6 @@ function Table<T>({
       minSize: 0,
     },
   });
-
-  const [windowSize, setWindowSize] = useState(window.innerWidth);
-
-  useEffect(() => {
-    const handleWindowResize = () => setWindowSize(window.innerWidth);
-    window.addEventListener('resize', handleWindowResize);
-    return () => window.removeEventListener('resize', handleWindowResize);
-  }, []);
 
   useEffect(() => {
     table.setPageSize(limit);
@@ -142,8 +130,9 @@ function Table<T>({
             <div
               key={pageIndex}
               className={`px-3 cursor-pointer ${
-                table.getState().pagination.pageIndex === pageIndex &&
-                'text-primary'
+                table.getState().pagination.pageIndex === pageIndex
+                ? 'text-primary'
+                : ''
               }`}
               onClick={() => table.setPageIndex(pageIndex)}
             >

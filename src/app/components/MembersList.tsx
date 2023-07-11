@@ -30,8 +30,6 @@ const MembersList = ({ members }: Props) => {
         Members
       </div>
       <Table
-        title="Members"
-        primaryField="member.name"
         data={members}
         columns={columns}
       />
