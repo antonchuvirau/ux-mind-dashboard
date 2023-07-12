@@ -38,7 +38,14 @@ const InnerProjectsList = ({ projects }: Props) => {
       <Table
         data={projects}
         columns={columns}
-        onRowClick={(project) => router.push("/projects/" + project.id)}
+        onRowClick={(project) => router.push(`/projects/${project.id}`)}
+        onPageChange={(projects) =>
+          // TODO: maybe we don't want to prefetch whole page, but rows on hover instead?
+          // Could waste a lot of prefetch requests if page size is big
+          projects.forEach((row) => {
+            router.prefetch(`/projects/${row.id}`);
+          })
+        }
       />
     </div>
   );

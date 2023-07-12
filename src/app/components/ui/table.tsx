@@ -1,5 +1,5 @@
 import {
-  ColumnDef,
+  type ColumnDef,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
@@ -12,6 +12,7 @@ interface Props<T> {
   data: T[];
   columns: ColumnDef<T, any>[];
   onRowClick?: (row: T) => void;
+  onPageChange?: (rows: T[]) => void;
   isLoading?: boolean;
   limit?: number;
   paginationRange?: number;
@@ -22,6 +23,7 @@ function Table<T>({
   isLoading,
   columns,
   onRowClick,
+  onPageChange,
   limit = 20,
   paginationRange = 5, // How many page links to show in pagination, should be odd number
 }: Props<T>) {
@@ -37,6 +39,12 @@ function Table<T>({
       minSize: 0,
     },
   });
+
+  const pageIndex = table.getState().pagination.pageIndex;
+
+  useEffect(() => {
+    onPageChange?.(table.getRowModel().rows.map((r) => r.original));
+  }, [pageIndex, table, onPageChange]);
 
   useEffect(() => {
     table.setPageSize(limit);
