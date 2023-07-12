@@ -2,17 +2,6 @@ import { prisma } from '@/server/db';
 import Hubstaff from '@app-masters/hubstaff-node-client';
 import { type HubstaffAccess } from '@prisma/client';
 
-const onRefresh = (accessToken: string, refreshToken: string) => {
-  console.log('Token has been refreshed', { accessToken });
-  return prisma.hubstaffAccess.update({
-    where: {},
-    data: {
-      accessToken,
-      refreshToken,
-    },
-  });
-};
-
 const ORGANIZATION_ID = process.env.ORGANIZATION_ID;
 
 class HubstaffClient extends Hubstaff {
@@ -32,7 +21,16 @@ class HubstaffClient extends Hubstaff {
     return new HubstaffClient(access);
   }
   constructor(access: HubstaffAccess) {
-    super(access, onRefresh);
+    super(access, async (accessToken: string, refreshToken: string) => {
+      console.log('Token has been refreshed', { accessToken });
+      return prisma.hubstaffAccess.update({
+        where: {},
+        data: {
+          accessToken,
+          refreshToken,
+        },
+      });
+    });
   }
   async getOrganizationUsers() {
     const members = await this.getOrganizationMembers(
@@ -44,7 +42,6 @@ class HubstaffClient extends Hubstaff {
         return user;
       })
     );
-    console.log(res);
     return res;
   }
 }
