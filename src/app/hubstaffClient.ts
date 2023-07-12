@@ -5,7 +5,12 @@ import { z } from 'zod';
 import _ from 'lodash';
 import { type HubstaffAccess } from '@prisma/client';
 import { URLSearchParams } from 'url';
-import { projectSchema, userSchema } from './hubstaffValidators';
+import {
+  HubstaffProject,
+  paginationSchema,
+  projectSchema,
+  userSchema,
+} from './hubstaffValidators';
 
 const BASE_URL = 'https://api.hubstaff.com/v2';
 const ORG_ID = process.env.ORGANIZATION_ID || '';
@@ -116,20 +121,28 @@ class HubstaffClient {
     return project;
   }
 
-  // TODO: pagination
-  async getProjects() {
-    const params = new URLSearchParams({ page_limit: PAGE_LIMIT.toString() });
+  async getProjects(pageId?: number): Promise<HubstaffProject[]> {
+    const params = new URLSearchParams({
+      page_limit: PAGE_LIMIT.toString(),
+      page_start_id: pageId?.toString() || '',
+    });
     const res = await this.request(
       `/organizations/${ORG_ID}/projects?${params.toString()}`,
       { next: { revalidate: 3600 } }
     );
 
-    const { projects } = z
+    const { projects, pagination } = z
       .object({
         projects: projectSchema.array(),
+        pagination: paginationSchema,
       })
       .parse(res);
-    return projects;
+
+    const nextPageProjects = pagination?.next_page_start_id
+      ? await this.getProjects(pagination.next_page_start_id)
+      : [];
+
+    return [...projects, ...nextPageProjects];
   }
 
   async getUser(id: number) {
