@@ -7,7 +7,7 @@ import HubstaffClient from './hubstaffClient';
 export const revalidate = 3600;
 
 export default async function Home() {
-  const client = new HubstaffClient();
+  const client = await HubstaffClient.createClient();
   const projects = await client.getProjects(
     process.env.ORGANIZATION_ID ? Number(process.env.ORGANIZATION_ID) : 0
   );

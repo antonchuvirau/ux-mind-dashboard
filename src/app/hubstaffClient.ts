@@ -1,34 +1,38 @@
+import { prisma } from '@/server/db';
 import Hubstaff from '@app-masters/hubstaff-node-client';
+import { type HubstaffAccess } from '@prisma/client';
 
-const refreshTokenCallback = (accessToken: string, refreshToken: string) => {
-  console.log('A new token has received');
-  console.log('access token', accessToken);
-  console.log('refresh token', refreshToken);
+const onRefresh = (accessToken: string, refreshToken: string) => {
+  console.log('Token has been refreshed', { accessToken });
+  return prisma.hubstaffAccess.update({
+    where: {},
+    data: {
+      accessToken,
+      refreshToken,
+    },
+  });
 };
 
 const ORGANIZATION_ID = process.env.ORGANIZATION_ID;
-const REFRESH_TOKEN = process.env.REFRESH_TOKEN;
 
 class HubstaffClient extends Hubstaff {
-  constructor() {
-    // TODO: validate env
-    super(
-      {
-        accessToken: process.env.ACCESS_TOKEN || '',
-        refreshToken: process.env.REFRESH_TOKEN || '',
-      },
-      refreshTokenCallback
+  static async createClient() {
+    // We assume only one hubstaffAccess will ever exist in DB. Maybe in future we will have more?
+    const access = await prisma.hubstaffAccess.findFirstOrThrow().catch(() => {
+      console.log('HubstaffAccess does not exist in DB, creating new one');
+      return prisma.hubstaffAccess.create({
+        data: {
+          accessToken: process.env.ACCESS_TOKEN || '',
+          refreshToken: process.env.REFRESH_TOKEN || '',
+        },
+      })
+    }
     );
+
+    return new HubstaffClient(access);
   }
-  // TODO: do we need this method?
-  async getToken() {
-    const tokenObj = await Hubstaff.getAccessToken(
-      REFRESH_TOKEN ? REFRESH_TOKEN : ''
-    );
-    console.log('accessToken');
-    console.log(tokenObj.accessToken);
-    console.log('refreshToken');
-    console.log(tokenObj.refreshToken);
+  constructor(access: HubstaffAccess) {
+    super(access, onRefresh);
   }
   async getOrganizationUsers() {
     const members = await this.getOrganizationMembers(
