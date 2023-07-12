@@ -1,15 +1,27 @@
+import { cache } from 'react';
 import { prisma } from '../../../server/db';
-import { revalidatePath } from 'next/cache';
+import { type Metadata } from 'next';
+
+const getProject = cache((id: string) => {
+  return prisma.project.findFirstOrThrow({
+    where: { id },
+  });
+});
+
 interface Props {
   params: {
-    id: string
-  }
+    id: string;
+  };
 }
 
-export default async function SingleProject({ params } : Props) {
-  const project = await prisma.project.findFirst({
-    where: { id: params.id },
-  });
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const project = await getProject(params.id);
+  return { title: project.name }
+}
+
+
+export default async function SingleProject({ params }: Props) {
+  const project = await getProject(params.id);
   console.log(project);
   return (
     <main className="container mx-auto py-10">
@@ -26,19 +38,19 @@ export default async function SingleProject({ params } : Props) {
         Upwork ID:
       </div>
       <div className="text-primary mb-10 text-2xl leading-tight">
-        {project?.upworkId || "No"}
+        {project?.upworkId || 'No'}
       </div>
       <div className="text-primary mb-2 text-2xl font-medium leading-tight">
         Hubstaff ID:
       </div>
       <div className="text-primary mb-10 mt-0 text-2xl leading-tight">
-        {project?.hubstaffId || "No"}
+        {project?.hubstaffId || 'No'}
       </div>
       <div className="text-primary mb-2 text-2xl font-medium leading-tight">
         Asana ID:
       </div>
       <div className="text-primary text-2xl leading-tight">
-        {project?.asanaId || "No"}
+        {project?.asanaId || 'No'}
       </div>
     </main>
   );

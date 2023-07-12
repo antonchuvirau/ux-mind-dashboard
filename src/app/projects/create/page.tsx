@@ -2,6 +2,10 @@ import { prisma } from '../../../server/db';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
+export const metadata = {
+  title: 'Create project',
+};
+
 export default function Create() {
   const addProject = async (form: FormData) => {
     'use server';
