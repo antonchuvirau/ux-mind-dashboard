@@ -1,14 +1,13 @@
 'use client';
-import { type Activity } from '@app-masters/hubstaff-node-client/dist/types';
 import { createColumnHelper } from '@tanstack/react-table';
 import Table from './ui/table';
 
 interface Props {
-  activities: Activity[];
+  activities: any[];
 }
 
 const ActivitiesList = ({ activities }: Props) => {
-  const columnHelper = createColumnHelper<Activity>();
+  const columnHelper = createColumnHelper<any>();
 
   const columns = [
     columnHelper.accessor('id', {

@@ -4,8 +4,11 @@ import { z } from 'zod';
 import _ from 'lodash';
 import { type HubstaffAccess } from '@prisma/client';
 import { URLSearchParams } from 'url';
+import { projectSchema, userSchema } from './hubstaffValidators';
 
 const BASE_URL = 'https://api.hubstaff.com/v2';
+const ORG_ID = process.env.ORGANIZATION_ID || '';
+const PAGE_LIMIT = 500;
 
 class HubstaffClient {
   access: Partial<HubstaffAccess>;
@@ -102,20 +105,58 @@ class HubstaffClient {
     });
   }
 
-  async getProject(projectId: number) {
-    const res = await this.get(`projects/${projectId}`, {
+  async getProject(id: number) {
+    const res = await this.get(`projects/${id}`, {
       next: { revalidate: 60 },
     });
     const { project } = z
       .object({
-        project: z.object({
-          id: z.number(),
-          name: z.string(),
-          status: z.string(),
-        }),
+        project: projectSchema,
       })
       .parse(res);
     return project;
+  }
+
+  // TODO: pagination
+  async getProjects() {
+    const params = new URLSearchParams({ page_limit: PAGE_LIMIT.toString() });
+    const res = await this.request(
+      `/organizations/${ORG_ID}/projects?${params.toString()}`,
+      { next: { revalidate: 3600 } }
+    );
+
+    const { projects } = z
+      .object({
+        projects: projectSchema.array(),
+      })
+      .parse(res);
+    return projects;
+  }
+
+  async getUser(id: number) {
+    const res = await this.get(`users/${id}`, {
+      next: { revalidate: 3600 },
+    });
+    const { user } = z
+      .object({
+        user: userSchema,
+      })
+      .parse(res);
+    return user;
+  }
+
+  async getOrganizationMembers() {
+    const params = new URLSearchParams({ page_limit: PAGE_LIMIT.toString() });
+    const res = await this.request(
+      `/organizations/${ORG_ID}/members?${params.toString()}`,
+      { next: { revalidate: 3600 } }
+    );
+    const { members } = z
+      .object({
+        members: z.object({ user_id: z.number() }).array(),
+      })
+      .parse(res);
+    return Promise.all(members.map((member) => this.getUser(member.user_id)));
   }
 }
 
