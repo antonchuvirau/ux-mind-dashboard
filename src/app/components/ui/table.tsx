@@ -24,7 +24,7 @@ function Table<T>({
   columns,
   onRowClick,
   onPageChange,
-  limit = 20,
+  limit = 10,
   paginationRange = 5, // How many page links to show in pagination, should be odd number
 }: Props<T>) {
   const table = useReactTable({

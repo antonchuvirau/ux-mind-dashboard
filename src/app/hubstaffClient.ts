@@ -6,7 +6,9 @@ import _ from 'lodash';
 import { type HubstaffAccess } from '@prisma/client';
 import { URLSearchParams } from 'url';
 import {
+  HubstaffActivity,
   HubstaffProject,
+  activitySchema,
   paginationSchema,
   projectSchema,
   userSchema,
@@ -169,6 +171,41 @@ class HubstaffClient {
       })
       .parse(res);
     return Promise.all(members.map((member) => this.getUser(member.user_id)));
+  }
+
+  // TODO: add more filters that API supports
+  async getActivities(
+    startTime: Date,
+    stopTime: Date,
+    pageId?: number
+  ): Promise<HubstaffActivity[]> {
+    const params = new URLSearchParams({
+      page_limit: PAGE_LIMIT.toString(),
+      page_start_id: pageId?.toString() || '',
+      'time_slot[start]': startTime.toISOString(),
+      'time_slot[stop]': stopTime.toISOString(),
+    });
+    const res = await this.request(
+      `/organizations/${ORG_ID}/activities?${params.toString()}`,
+      { next: { revalidate: 3600 } }
+    );
+
+    const { activities, pagination } = z
+      .object({
+        activities: activitySchema.array(),
+        pagination: paginationSchema,
+      })
+      .parse(res);
+
+    const nextPageActivities = pagination?.next_page_start_id
+      ? await this.getActivities(
+          startTime,
+          stopTime,
+          pagination.next_page_start_id
+        )
+      : [];
+
+    return [...activities, ...nextPageActivities];
   }
 }
 
