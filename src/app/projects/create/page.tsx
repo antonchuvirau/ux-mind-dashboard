@@ -1,5 +1,6 @@
 import { prisma } from '../../../server/db';
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 
 export default function Create() {
   const addProject = async (form: FormData) => {
@@ -19,7 +20,8 @@ export default function Create() {
         asanaId: asanaID,
       },
     });
-    revalidatePath('/');
+    revalidatePath('/projects');
+    redirect('/projects');
   };
   return (
     <main className="container mx-auto py-10">
