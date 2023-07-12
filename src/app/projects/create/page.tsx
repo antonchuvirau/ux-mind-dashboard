@@ -1,6 +1,7 @@
-import { prisma } from '../../server/db';
+import { prisma } from '../../../server/db';
 import { revalidatePath } from 'next/cache';
-export default function Form() {
+
+export default function Create() {
   const addProject = async (form: FormData) => {
     'use server';
     const projectName = form.get('project-name')?.toString();
