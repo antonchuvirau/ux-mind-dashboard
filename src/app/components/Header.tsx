@@ -1,25 +1,20 @@
+import Link from "next/link";
+
 const Header = () => {
   return (
     <header>
       <nav className="border-gray-200 bg-white px-4 py-2.5 dark:bg-gray-800 lg:px-6">
-        <div className="container mx-auto mx-auto flex flex-wrap items-center justify-between">
-          <a href="/" className="flex items-center">
-            <img
-              src="https://flowbite.com/docs/images/logo.svg"
-              className="mr-3 h-6 sm:h-9"
-              alt="Flowbite Logo"
-            />
-            <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-              Dashboard
-            </span>
-          </a>
+        <div className="container mx-auto flex flex-wrap items-center justify-between">
+          <Link href="/" className="flex items-center text-xl fond-semibold text-white">
+            UXMind Dashboard
+          </Link>
           <div className="flex items-center lg:order-2">
-            <a
+            <Link
               href="#"
               className="bg-primary-700 hover:bg-primary-800 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 mr-2 rounded-lg px-4 py-2 text-sm font-medium text-white focus:outline-none focus:ring-4 lg:px-5 lg:py-2.5"
             >
               Get started
-            </a>
+            </Link>
             <button
               data-collapse-toggle="mobile-menu-2"
               type="button"
@@ -60,28 +55,28 @@ const Header = () => {
           >
             <ul className="mt-4 flex flex-col font-medium lg:mt-0 lg:flex-row lg:space-x-8">
               <li>
-                <a
+                <Link
                   href="/"
                   className="lg:hover:text-primary-700 block border-b border-gray-100 py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white lg:border-0 lg:p-0 lg:hover:bg-transparent lg:dark:hover:bg-transparent lg:dark:hover:text-white"
                 >
                   Dashboard
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="/projects"
                   className="lg:hover:text-primary-700 block border-b border-gray-100 py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white lg:border-0 lg:p-0 lg:hover:bg-transparent lg:dark:hover:bg-transparent lg:dark:hover:text-white"
                 >
                   Projects
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="/projects/create"
                   className="lg:hover:text-primary-700 block border-b border-gray-100 py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white lg:border-0 lg:p-0 lg:hover:bg-transparent lg:dark:hover:bg-transparent lg:dark:hover:text-white"
                 >
                   Add project
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
