@@ -1,12 +1,11 @@
-import { type Activity } from '@app-masters/hubstaff-node-client/dist/types';
-
+/* eslint-disable */
 interface Props {
-  activities: Activity[];
+  activities: any[];
 }
 
 const ActivitiesSum = ({ activities }: Props) => {
   const trackedTime = activities.reduce(
-    (sum: number, activity: Activity) =>
+    (sum: number, activity: any) =>
       activity.tracked ? sum + activity.tracked : sum,
     0
   );

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { prisma } from '@/server/db';
 import jwtDecode from 'jwt-decode';
 import { z } from 'zod';
@@ -37,16 +38,14 @@ class HubstaffClient {
     );
 
     const access = z
-      .preprocess(
-        (value: unknown) => ({
-          accessToken: value.access_token,
-          refreshToken: value.refresh_token,
-        }),
-        z.object({
-          accessToken: z.string(),
-          refreshToken: z.string(),
-        })
-      )
+      .object({
+        access_token: z.string(),
+        refresh_token: z.string(),
+      })
+      .transform((v) => ({
+        accessToken: v.access_token,
+        refreshToken: v.refresh_token,
+      }))
       .parse(await res.json());
 
     const { exp } = z
