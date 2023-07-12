@@ -1,13 +1,14 @@
 'use client';
 import { createColumnHelper } from '@tanstack/react-table';
 import Table from './ui/table';
+import { type HubstaffActivity } from '../hubstaffValidators';
 
 interface Props {
-  activities: any[];
+  activities: HubstaffActivity[];
 }
 
 const ActivitiesList = ({ activities }: Props) => {
-  const columnHelper = createColumnHelper<any>();
+  const columnHelper = createColumnHelper<HubstaffActivity>();
 
   const columns = [
     columnHelper.accessor('id', {

@@ -6,8 +6,8 @@ import _ from 'lodash';
 import { type HubstaffAccess } from '@prisma/client';
 import { URLSearchParams } from 'url';
 import {
-  HubstaffActivity,
-  HubstaffProject,
+  type HubstaffActivity,
+  type HubstaffProject,
   activitySchema,
   paginationSchema,
   projectSchema,

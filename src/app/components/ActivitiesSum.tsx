@@ -1,12 +1,12 @@
-/* eslint-disable */
+import { type HubstaffActivity } from '../hubstaffValidators';
+
 interface Props {
-  activities: any[];
+  activities: HubstaffActivity[];
 }
 
 const ActivitiesSum = ({ activities }: Props) => {
   const trackedTime = activities.reduce(
-    (sum: number, activity: any) =>
-      activity.tracked ? sum + activity.tracked : sum,
+    (sum, activity) => (activity.tracked ? sum + activity.tracked : sum),
     0
   );
 

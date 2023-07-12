@@ -1,4 +1,5 @@
 import ActivitiesList from './components/ActivitiesList';
+import ActivitiesSum from './components/ActivitiesSum';
 import MembersList from './components/MembersList';
 import ProjectsList from './components/ProjectsList';
 import HubstaffClient from './hubstaffClient';
@@ -14,6 +15,7 @@ export default async function Home() {
 
   return (
     <main className="container mx-auto py-10">
+      <ActivitiesSum activities={activities} />
       <MembersList members={members} />
       <ProjectsList projects={projects} />
       <ActivitiesList activities={activities} />
