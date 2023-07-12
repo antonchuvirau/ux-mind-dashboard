@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function SingleProject({ params }: Props) {
   const project = await getProject(params.id);
-  const client = await HubstaffClient.createClient();
+  const client = new HubstaffClient();
   const hubstaffProject = project.hubstaffId
     ? await client.getProject(Number(project.hubstaffId)).catch((e) => {
         console.log(e);
