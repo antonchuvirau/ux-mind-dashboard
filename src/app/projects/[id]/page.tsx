@@ -1,6 +1,9 @@
+import HubstaffClient from '@/app/hubstaffClient';
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid';
+import { type Metadata } from 'next';
+import Link from 'next/link';
 import { cache } from 'react';
 import { prisma } from '../../../server/db';
-import { type Metadata } from 'next';
 
 const getProject = cache((id: string) => {
   return prisma.project.findFirstOrThrow({
@@ -16,13 +19,21 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const project = await getProject(params.id);
-  return { title: project.name }
+  return { title: project.name };
 }
-
 
 export default async function SingleProject({ params }: Props) {
   const project = await getProject(params.id);
-  console.log(project);
+  const client = await HubstaffClient.createClient();
+  const hubstaffProject = project.hubstaffId
+    ? await client.getProject(Number(project.hubstaffId)).catch((e) => {
+        console.log(e);
+        return null;
+      })
+    : null;
+
+  console.log({ project, hubstaffProject });
+
   return (
     <main className="container mx-auto py-10">
       <div className="text-primary mb-10 mt-0 text-5xl font-medium leading-tight">
@@ -52,6 +63,23 @@ export default async function SingleProject({ params }: Props) {
       <div className="text-primary text-2xl leading-tight">
         {project?.asanaId || 'No'}
       </div>
+
+      {hubstaffProject && (
+        <section className="my-10">
+          <h1 className="text-xl font-bold">Hubstaff data</h1>
+          <p>Name: {hubstaffProject.name}</p>
+          <Link
+            href={`https://app.hubstaff.com/projects/${
+              hubstaffProject.id || ''
+            }`}
+            className="mt-4 flex gap-2 underline"
+            target="_blank"
+          >
+            <ArrowTopRightOnSquareIcon className="h-6 w-6" />
+            Open in Hubstaff
+          </Link>
+        </section>
+      )}
     </main>
   );
 }

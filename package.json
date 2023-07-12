@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@app-masters/hubstaff-node-client": "^2.0.4",
+    "@heroicons/react": "^2.0.18",
     "@prisma/client": "^4.16.2",
     "@tanstack/react-table": "^8.9.3",
     "lodash": "^4.17.21",
