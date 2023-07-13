@@ -1,7 +1,7 @@
 'use client';
-import { type User as HubstaffUser } from '@app-masters/hubstaff-node-client/dist/types';
 import { createColumnHelper } from '@tanstack/react-table';
 import Table from './ui/table';
+import { type HubstaffUser } from '../hubstaffValidators';
 
 interface Props {
   members: HubstaffUser[];
@@ -25,7 +25,7 @@ const MembersList = ({ members }: Props) => {
   return (
     <div className="mt-5">
       <div className="text-primary mb-2 mt-0 text-5xl font-medium leading-tight">
-        Members
+        Hubstaff Members
       </div>
       <Table data={members} columns={columns} />
     </div>

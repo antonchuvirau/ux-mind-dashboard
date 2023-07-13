@@ -7,7 +7,6 @@ export const metadata = {
 
 export default async function Projects() {
   const projects = await prisma.project.findMany();
-  console.log(projects);
   return (
     <main className="container mx-auto py-10">
       <InnerProjectsList projects={projects} />

@@ -1,30 +1,23 @@
-import ProjectsList from './components/ProjectsList';
-import MembersList from './components/MembersList';
 import ActivitiesList from './components/ActivitiesList';
 import ActivitiesSum from './components/ActivitiesSum';
+import MembersList from './components/MembersList';
+import ProjectsList from './components/ProjectsList';
 import HubstaffClient from './hubstaffClient';
 
-export const revalidate = 3600;
-
 export default async function Home() {
-  const client = await HubstaffClient.createClient();
-  const projects = await client.getProjects(
-    process.env.ORGANIZATION_ID ? Number(process.env.ORGANIZATION_ID) : 0
-  );
-  const members = await client.getOrganizationUsers();
+  const client = new HubstaffClient();
+  const members = await client.getOrganizationMembers();
+  const projects = await client.getProjects();
   const activities = await client.getActivities(
-    process.env.ORGANIZATION_ID ? Number(process.env.ORGANIZATION_ID) : 0,
-    {
-      startTime: new Date(2023, 1, 1),
-      stopTime: new Date(2023, 1, 5),
-    }
+    new Date('2023-07-01'),
+    new Date('2023-07-08')
   );
 
   return (
     <main className="container mx-auto py-10">
       <ActivitiesSum activities={activities} />
-      <ProjectsList projects={projects} />
       <MembersList members={members} />
+      <ProjectsList projects={projects} />
       <ActivitiesList activities={activities} />
     </main>
   );

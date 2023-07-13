@@ -1,13 +1,12 @@
-import { type Activity } from '@app-masters/hubstaff-node-client/dist/types';
+import { type HubstaffActivity } from '../hubstaffValidators';
 
 interface Props {
-  activities: Activity[];
+  activities: HubstaffActivity[];
 }
 
 const ActivitiesSum = ({ activities }: Props) => {
   const trackedTime = activities.reduce(
-    (sum: number, activity: Activity) =>
-      activity.tracked ? sum + activity.tracked : sum,
+    (sum, activity) => (activity.tracked ? sum + activity.tracked : sum),
     0
   );
 
