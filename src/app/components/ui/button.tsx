@@ -25,9 +25,9 @@ export default function Button({
         disabled:bg-gray-400
         bg-black
         text-white uppercase
-        ${isLoading && 'cursor-progress'}
-        ${variant === 'primary' && 'bg-primary'}
-        ${variant === 'secondary' && 'bg-secondary'}
+        ${isLoading ? 'cursor-progress' : ''}
+        ${variant === 'primary' ? 'bg-primary' : ''}
+        ${variant === 'secondary' ? 'bg-secondary' : ''}
         ${className}
       `}
       {...rest}

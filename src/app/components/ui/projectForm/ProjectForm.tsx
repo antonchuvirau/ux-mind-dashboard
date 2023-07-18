@@ -31,11 +31,14 @@ export default function ProjectForm() {
     //defaultValues: init(schema),
     mode: 'onBlur',
   });
-  const { push } = useRouter();
+  const router = useRouter();
 
   const onSubmit = handleSubmit((data) => {
-    addProject(data);
-    push('/projects');
+    addProject(data)
+    .catch(err => console.error('project adding error'))
+    .then(() => console.log('successfully added'))
+    .catch(() => console.log('promise catched'));
+    router.push('/projects');
   });
 
   return (
