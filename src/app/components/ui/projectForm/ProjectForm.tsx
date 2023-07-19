@@ -2,13 +2,18 @@
 import Button from '../button';
 import Input from '../input';
 import useZodForm from '../../../hooks/useZodForm';
-//import { useContext } from 'react';
+import { useState } from 'react';
 import { z } from 'zod';
-import { addProject } from '../../../actions/actions';
+import { addProject, editProject } from '../../../actions/actions';
 import { useRouter } from 'next/navigation';
+import { type Project } from '@prisma/client';
 //import init from 'zod-empty';
 //import ErrorContext from '../../../state/error/error.context';
 //import ErrorProvider from '../../../state/error/error.provider';
+
+interface Props {
+  project?: Project;
+}
 
 export const schema = z.object({
   name: z
@@ -19,11 +24,9 @@ export const schema = z.object({
   asanaId: z.string(),
 });
 
-export default function ProjectForm() {
-  //const { errorState } = useContext(ErrorContext);
+export default function ProjectForm({ project }: Props) {
   const {
     register,
-    control,
     handleSubmit,
     formState: { errors, isValid, isSubmitting, isDirty },
   } = useZodForm({
@@ -32,12 +35,27 @@ export default function ProjectForm() {
     mode: 'onBlur',
   });
   const router = useRouter();
+  const [name, setName] = useState(project?.name ? project.name : "");
+  const [upworkId, setUpworkId] = useState(project?.upworkId ? project.upworkId : "");
+  const [hubstaffId, setHubstaffId] = useState(project?.hubstaffId ? project.hubstaffId : "");
+  const [asanaId, setAsanaId] = useState(project?.asanaId ? project.asanaId : "");
 
   const onSubmit = handleSubmit((data) => {
-    addProject(data)
-    .catch(err => console.error('project adding error'))
-    .then(() => console.log('successfully added'))
-    .catch(() => console.log('promise catched'));
+    if (project) {
+      const modifiedData = {
+        ...data,
+        id: project?.id,
+      }
+      editProject(modifiedData)
+      .catch(err => console.error('project edit error'))
+      .then(() => console.log('successfully edited'))
+      . catch(() => console.log('promise catched'));
+    } else{
+      addProject(data)
+      .catch(err => console.error('project add error'))
+      .then(() => console.log('successfully added'))
+      .catch(() => console.log('promise catched'));
+    }
     router.push('/projects');
   });
 
@@ -46,29 +64,35 @@ export default function ProjectForm() {
       <Input
         placeholder="Full Name"
         name="name"
+        defaultValue={project?.name ? project.name : ""}
         register={register}
         errors={errors}
       />
       <Input
         placeholder="Upwork id"
         name="upworkId"
+        defaultValue={project?.upworkId ? project.upworkId : ""}
         register={register}
         errors={errors}
       />
       <Input
         placeholder="Hubstaff id"
         name="hubstaffId"
+        defaultValue={project?.hubstaffId ? project.hubstaffId : ""}
         register={register}
         errors={errors}
       />
       <Input
         placeholder="Asana id"
         name="asanaId"
+        defaultValue={project?.asanaId ? project.asanaId : ""}
         register={register}
         errors={errors}
       />
       <Button type="submit" disabled={!isValid || !isDirty || isSubmitting}>
-        Add project
+        {project
+        ? "Edit project"
+        : "Add project"}
       </Button>
       {/*errorState.map((error, index) => (
         <div key={index} className="text-danger my-4 text-center">

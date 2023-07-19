@@ -4,6 +4,7 @@ import { prisma } from '../../server/db';
 import { revalidatePath } from 'next/cache';
 
 interface ProjectData {
+    id?: string;
     name: string;
     upworkId?: string;
     hubstaffId?: string;
@@ -11,19 +12,33 @@ interface ProjectData {
 }
 
 export const addProject = async (data: ProjectData) => {
-    const projectName = data.name;
-    const upworkID = data.upworkId;
-    const hubstaffId = data.hubstaffId;
-    const asanaID = data.asanaId;
-    if (!projectName) {
+    if (!data.name) {
         return;
     }
     await prisma.project.create({
         data: {
-        name: projectName,
-        upworkId: upworkID,
-        hubstaffId: hubstaffId,
-        asanaId: asanaID,
+        name: data.name,
+        upworkId: data.upworkId,
+        hubstaffId: data.hubstaffId,
+        asanaId: data.asanaId,
+        },
+    });
+    revalidatePath('/projects');
+};
+
+export const editProject = async (data: ProjectData) => {
+    if (!data.name) {
+        return;
+    }
+    await prisma.project.update({
+        where: {
+            id: data.id
+        },
+        data: {
+            name: data.name,
+            upworkId: data.upworkId,
+            hubstaffId: data.hubstaffId,
+            asanaId: data.asanaId,
         },
     });
     revalidatePath('/projects');
