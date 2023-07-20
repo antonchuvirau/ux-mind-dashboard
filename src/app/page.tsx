@@ -19,8 +19,12 @@ export default async function Home({
     new Date('2023-07-08')
   );*/
   const activities = await client.getActivities(
-    new Date(searchParams.startDate ? String(searchParams.startDate) : '2023-07-01'),
-    new Date(searchParams.startDate ? String(searchParams.endDate) : '2023-07-08')
+    searchParams.startDate
+    ? new Date(String(searchParams.startDate))
+    : new Date(),
+    searchParams.endDate
+    ? new Date(String(searchParams.endDate))
+    : new Date(),
   );
 
   return (

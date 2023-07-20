@@ -13,12 +13,12 @@ const HoursTracked = ({ activities }: Props) => {
   const [startDate, setStartDate] = useState(
     params.get("startDate")
     ? new Date(String(params.get("startDate")))
-    : new Date("2023-01-01")
+    : new Date()
   );
   const [endDate, setEndDate] = useState(
     params.get("endDate")
     ? new Date(String(params.get("endDate")))
-    : new Date("2023-01-08")
+    : new Date()
   );
   const router = useRouter();
 
@@ -50,7 +50,11 @@ const HoursTracked = ({ activities }: Props) => {
         type="date"
         placeholder="Start date"
         onChange={(e) => handleChangeStartDate(new Date(e.target.value))}
-        value={String(params.get("startDate"))}
+        value={
+          params.get("startDate")
+          ? String(params.get("startDate"))
+          : (new Date()).toISOString().slice(0,10)
+        }
       />
       <div className="text-primary mb-2 mt-0 text-2xl leading-tight">
         End date
@@ -60,7 +64,11 @@ const HoursTracked = ({ activities }: Props) => {
         type="date"
         placeholder="End date"
         onChange={(e) => handleChangEndDate(new Date(e.target.value))}
-        value={String(params.get("endDate"))}
+        value={
+          params.get("endDate")
+          ? String(params.get("endDate"))
+          : (new Date()).toISOString().slice(0,10)
+        }
       />
       <div className="text-primary mb-2 mt-0 text-2xl leading-tight">
         Hours: {Math.trunc(trackedTime / 3600)}
