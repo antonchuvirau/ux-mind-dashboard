@@ -25,7 +25,7 @@ export default async function Edit({ params }: Props) {
       <div className="text-primary mb-2 mt-0 text-5xl font-medium leading-tight">
         Edit project
       </div>
-      <ProjectForm project={project} />
+      <ProjectForm defaultValues={project} />
     </main>
   );
 }
