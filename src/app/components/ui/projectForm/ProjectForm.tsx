@@ -2,14 +2,10 @@
 import Button from '../button';
 import Input from '../input';
 import useZodForm from '../../../hooks/useZodForm';
-import { useState } from 'react';
 import { z } from 'zod';
 import { addProject, editProject } from '../../../actions/actions';
 import { useRouter } from 'next/navigation';
 import { type Project } from '@prisma/client';
-//import init from 'zod-empty';
-//import ErrorContext from '../../../state/error/error.context';
-//import ErrorProvider from '../../../state/error/error.provider';
 
 interface Props {
   project?: Project;
@@ -35,11 +31,6 @@ export default function ProjectForm({ project }: Props) {
     mode: 'onBlur',
   });
   const router = useRouter();
-  const [name, setName] = useState(project?.name ? project.name : "");
-  const [upworkId, setUpworkId] = useState(project?.upworkId ? project.upworkId : "");
-  const [hubstaffId, setHubstaffId] = useState(project?.hubstaffId ? project.hubstaffId : "");
-  const [asanaId, setAsanaId] = useState(project?.asanaId ? project.asanaId : "");
-
   const onSubmit = handleSubmit((data) => {
     if (project) {
       const modifiedData = {
@@ -94,12 +85,6 @@ export default function ProjectForm({ project }: Props) {
         ? "Edit project"
         : "Add project"}
       </Button>
-      {/*errorState.map((error, index) => (
-        <div key={index} className="text-danger my-4 text-center">
-          <h1 className="text-lg font-bold">{error.title}</h1>
-          {error.message}
-        </div>
-      ))*/}
     </form>
   );
 }
