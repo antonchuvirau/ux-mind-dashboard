@@ -38,7 +38,7 @@ export default function ProjectForm({ defaultValues }: Props) {
   });
   const router = useRouter();
 
-  const onSubmit = handleSubmit((data: any) => {
+  const onSubmit = handleSubmit((data) => {
     if (defaultValues) {
       const modifiedData = {
         ...data,

@@ -2,7 +2,10 @@
  
 import { prisma } from '../../server/db';
 import { revalidatePath } from 'next/cache';
-import { type Project } from '@prisma/client';
+import { schema } from '../components/ui/projectForm/ProjectForm';
+import { type z } from 'zod';
+
+type Project = z.infer<typeof schema>;
 
 export const addProject = async (data: Project) => {
     await prisma.project.create({
