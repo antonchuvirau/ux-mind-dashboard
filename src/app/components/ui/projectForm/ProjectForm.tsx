@@ -8,34 +8,41 @@ import { useRouter } from 'next/navigation';
 import { type Project } from '@prisma/client';
 
 interface Props {
-  project?: Project;
+  defaultValues?: Project;
 }
 
 export const schema = z.object({
+  id: z.string().optional(),
   name: z
     .string()
     .nonempty("Please enter project name"),
-  upworkId: z.string(),
-  hubstaffId: z.string(),
-  asanaId: z.string(),
+  upworkId: z.string().nullable(),
+  hubstaffId: z.string().nullable(),
+  asanaId: z.string().nullable(),
 });
 
-export default function ProjectForm({ project }: Props) {
+export default function ProjectForm({ defaultValues }: Props) {
   const {
     register,
     handleSubmit,
     formState: { errors, isValid, isSubmitting, isDirty },
   } = useZodForm({
     schema,
-    //defaultValues: init(schema),
+    defaultValues: defaultValues || {
+      name: '',
+      upworkId: '',
+      hubstaffId: '',
+      asanaId: '',
+    },
     mode: 'onBlur',
   });
   const router = useRouter();
-  const onSubmit = handleSubmit((data) => {
-    if (project) {
+
+  const onSubmit = handleSubmit((data: any) => {
+    if (defaultValues) {
       const modifiedData = {
         ...data,
-        id: project?.id,
+        id: defaultValues?.id,
       }
       editProject(modifiedData)
       .catch(err => console.error('project edit error'))
@@ -55,33 +62,29 @@ export default function ProjectForm({ project }: Props) {
       <Input
         placeholder="Full Name"
         name="name"
-        defaultValue={project?.name ? project.name : ""}
         register={register}
         errors={errors}
       />
       <Input
         placeholder="Upwork id"
         name="upworkId"
-        defaultValue={project?.upworkId ? project.upworkId : ""}
         register={register}
         errors={errors}
       />
       <Input
         placeholder="Hubstaff id"
         name="hubstaffId"
-        defaultValue={project?.hubstaffId ? project.hubstaffId : ""}
         register={register}
         errors={errors}
       />
       <Input
         placeholder="Asana id"
         name="asanaId"
-        defaultValue={project?.asanaId ? project.asanaId : ""}
         register={register}
         errors={errors}
       />
       <Button type="submit" disabled={!isValid || !isDirty || isSubmitting}>
-        {project
+        {defaultValues
         ? "Edit project"
         : "Add project"}
       </Button>
