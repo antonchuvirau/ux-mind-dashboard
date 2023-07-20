@@ -2,31 +2,21 @@
  
 import { prisma } from '../../server/db';
 import { revalidatePath } from 'next/cache';
+import { type Project } from '@prisma/client';
 
-interface ProjectData {
-    id?: string;
-    name: string;
-    upworkId?: string;
-    hubstaffId?: string;
-    asanaId?: string;
-}
-
-export const addProject = async (data: ProjectData) => {
-    if (!data.name) {
-        return;
-    }
+export const addProject = async (data: Project) => {
     await prisma.project.create({
         data: {
-        name: data.name,
-        upworkId: data.upworkId,
-        hubstaffId: data.hubstaffId,
-        asanaId: data.asanaId,
+            name: data.name,
+            upworkId: data.upworkId,
+            hubstaffId: data.hubstaffId,
+            asanaId: data.asanaId,
         },
     });
     revalidatePath('/projects');
 };
 
-export const editProject = async (data: ProjectData) => {
+export const editProject = async (data: Project) => {
     if (!data.name) {
         return;
     }
