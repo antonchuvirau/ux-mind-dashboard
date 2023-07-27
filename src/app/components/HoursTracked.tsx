@@ -31,6 +31,9 @@ const HoursTracked = ({ activities }: Props) => {
     setEndDate(date);
     router.push("/?startDate=" + startDate.toISOString().slice(0,10) + "&endDate=" + date.toISOString().slice(0,10));
   }
+
+  //console.log("activities");
+  //console.log(activities.length);
   
   const trackedTime = activities.reduce(
     (sum, activity) => (activity.tracked ? sum + activity.tracked : sum),
