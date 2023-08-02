@@ -43,7 +43,7 @@ export default async function SingleProject({ params }: Props) {
         ID:
       </div>
       <div className="text-primary mb-10 mt-0 text-2xl leading-tight">
-        {project?.id}:
+        {project?.id}
       </div>
       <div className="text-primary mb-2 text-2xl font-medium leading-tight">
         Upwork ID:
