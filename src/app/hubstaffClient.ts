@@ -181,7 +181,7 @@ class HubstaffClient {
     stopTime: Date,
     pageId?: number
   ): Promise<HubstaffActivity[]> {
-    const difference = (differenceInCalendarDays(stopTime, startTime));
+    const difference = differenceInCalendarDays(stopTime, startTime);
     if (difference > 7) {
       const numberOfIntervals = Math.trunc(difference / 7);
       const dateIntervals: { startTime: Date, stopTime: Date }[] = [];

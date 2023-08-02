@@ -1,7 +1,7 @@
 import ActivitiesList from './components/ActivitiesList';
-import HoursTracked from './components/HoursTracked';
 import MembersList from './components/MembersList';
 import ProjectsList from './components/ProjectsList';
+import HoursTracked from './components/HoursTracked';
 import HubstaffClient from './hubstaffClient';
 
 export default async function Home({
