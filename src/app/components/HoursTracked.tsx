@@ -100,7 +100,7 @@ const HoursTracked = ({ activities }: Props) => {
       <div className="grid grid-cols-4 gap-4 max-w-md">
         {months.map((month) => {
           return (
-            <Link href={`/tracked/${month.id}`}>
+            <Link key={month.name} href={`/tracked/${month.id}`}>
               <div className="p-2 border-solid border-2 hover:bg-gray-200/50">
                 {month.name}
               </div>

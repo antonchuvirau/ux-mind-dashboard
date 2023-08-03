@@ -19,12 +19,12 @@ const TrackedRange = ({ activities, date, monthId }: Props) => {
   const [startDate, setStartDate] = useState(
     params.get("startDate")
     ? new Date(String(params.get("startDate")))
-    : new Date(`2023-${monthId < 10 ? "0" + monthId : monthId}-01`)
+    : new Date(`2023-${monthId < 10 ? "0" + String(monthId) : monthId}-01`)
   );
   const [endDate, setEndDate] = useState(
     params.get("endDate")
     ? new Date(String(params.get("endDate")))
-    : new Date(`2023-${monthId < 10 ? "0" + monthId : monthId}-${getDaysInMonth(date)}`)
+    : new Date(`2023-${monthId < 10 ? "0" + String(monthId) : monthId}-${getDaysInMonth(date)}`)
   );
   const [startDay, setStartDay] = useState(1);
   const [endDay, setEndDay] = useState(getDaysInMonth(date));
@@ -35,12 +35,12 @@ const TrackedRange = ({ activities, date, monthId }: Props) => {
 
   const handleChangeStartDate = (date: Date) => {
     setStartDate(date);
-    router.push("/tracked/" + monthId + "?startDate=" + date.toISOString().slice(0,10) + "&endDate=" + endDate.toISOString().slice(0,10));
+    router.push("/tracked/" + String(monthId) + "?startDate=" + date.toISOString().slice(0,10) + "&endDate=" + endDate.toISOString().slice(0,10));
   }
 
   const handleChangeEndDate = (date: Date) => {
     setEndDate(date);
-    router.push("/tracked/" + monthId + "?startDate=" + startDate.toISOString().slice(0,10) + "&endDate=" + date.toISOString().slice(0,10));
+    router.push("/tracked/" + String(monthId) + "?startDate=" + startDate.toISOString().slice(0,10) + "&endDate=" + date.toISOString().slice(0,10));
   }
 
   //console.log("activities");
@@ -63,7 +63,7 @@ const TrackedRange = ({ activities, date, monthId }: Props) => {
     if (changeStartDay === true) {
       if (i < endDay - 1) {
         setStartDay(i + 1);
-        handleChangeStartDate(new Date(`2023-${monthId < 10 ? "0" + monthId : monthId}-${i + 1 < 10 ? "0" + (i + 1) : i + 1}`));
+        handleChangeStartDate(new Date(`2023-${monthId < 10 ? "0" + String(monthId) : monthId}-${i + 1 < 10 ? "0" + String(i + 1) : i + 1}`));
         setChangeStartDay(false);
         setHoveredDay(-1);
       }
@@ -71,7 +71,7 @@ const TrackedRange = ({ activities, date, monthId }: Props) => {
     if (changeEndDay === true) {
       if (i > startDay - 1) {
         setEndDay(i + 1);
-        handleChangeEndDate(new Date(`2023-${monthId < 10 ? "0" + monthId : monthId}-${i + 1 < 10 ? "0" + (i + 1) : i + 1}`));
+        handleChangeEndDate(new Date(`2023-${monthId < 10 ? "0" + String(monthId) : monthId}-${i + 1 < 10 ? "0" + String(i + 1) : i + 1}`));
         setChangeEndDay(false);
         setHoveredDay(-1);
       }
@@ -94,7 +94,7 @@ const TrackedRange = ({ activities, date, monthId }: Props) => {
   return (
     <div>
       <div className="grid grid-cols-7 gap-4 max-w-md">
-        {[...Array(getDaysInMonth(date))].map((e, i) =>
+        {Array.from({length: getDaysInMonth(date)}).map((e, i) =>
           <div
             key={i}
             className={
