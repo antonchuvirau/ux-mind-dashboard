@@ -7,12 +7,16 @@ interface Props {
   activities: HubstaffActivity[];
 }
 
+interface Sum {
+  activities: {}[];
+}
+
 const ActivitiesList = ({ activities }: Props) => {
   const columnHelper = createColumnHelper<HubstaffActivity>();
 
   const columns = [
-    columnHelper.accessor('id', {
-      header: 'Activity ID',
+    columnHelper.accessor('user_id', {
+      header: 'User ID',
     }),
     columnHelper.accessor('starts_at', {
       header: 'Starts At',
@@ -28,6 +32,7 @@ const ActivitiesList = ({ activities }: Props) => {
         Activities
       </div>
       <Table data={activities} columns={columns} />
+      {JSON.stringify(activities)}
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import ActivitiesList from './components/ActivitiesList';
 import MembersList from './components/MembersList';
 import ProjectsList from './components/ProjectsList';
-import HoursTracked from './components/HoursTracked';
+import TrackedRange from './components/TrackedRange';
 import HubstaffClient from './hubstaffClient';
 
 export default async function Home({
@@ -29,10 +29,10 @@ export default async function Home({
 
   return (
     <main className="container mx-auto py-10">
-      <HoursTracked activities={activities} />
+      <TrackedRange activities={activities} date={new Date()} />
+      <ActivitiesList activities={activities} />
       <MembersList members={members} />
       <ProjectsList projects={projects} />
-      <ActivitiesList activities={activities} />
     </main>
   );
 }
