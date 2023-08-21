@@ -7,10 +7,6 @@ interface Props {
   activities: HubstaffActivity[];
 }
 
-interface Sum {
-  activities: {}[];
-}
-
 const ActivitiesList = ({ activities }: Props) => {
   const columnHelper = createColumnHelper<HubstaffActivity>();
 

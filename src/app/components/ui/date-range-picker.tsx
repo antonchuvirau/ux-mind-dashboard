@@ -1,32 +1,49 @@
-import _ from 'lodash';
-import { MouseEventHandler } from 'react';
-import ReactDatePicker, { ReactDatePickerCustomHeaderProps, ReactDatePickerProps } from 'react-datepicker';
-import { FieldError, FieldValues, FieldErrors, Path, useController, UseControllerProps } from 'react-hook-form';
+import ReactDatePicker, {
+  type ReactDatePickerCustomHeaderProps,
+  type ReactDatePickerProps,
+} from 'react-datepicker';
+import {
+  type FieldValues,
+  type FieldErrors,
+  type Path,
+  useController,
+  type UseControllerProps,
+} from 'react-hook-form';
 import { format } from 'date-fns';
 import Label from './label';
 import { useRouter } from 'next/navigation';
-import "react-datepicker/dist/react-datepicker.css";
+import 'react-datepicker/dist/react-datepicker.css';
+import { type MouseEventHandler } from 'react';
 
-type Props<T extends FieldValues> = Omit<UseControllerProps<FieldValues>, 'name'>
-& Pick<ReactDatePickerProps, 'minDate' | 'maxDate' | 'disabled' | 'placeholderText' | 'required' | 'excludeDateIntervals'>
-& {
-  label: string;
-  startName: Path<T>;
-  endName: Path<T>;
-  errors?: FieldErrors<T>;
-}
-
+type Props<T extends FieldValues> = Omit<
+  UseControllerProps<FieldValues>,
+  'name'
+> &
+  Pick<
+    ReactDatePickerProps,
+    | 'minDate'
+    | 'maxDate'
+    | 'disabled'
+    | 'placeholderText'
+    | 'required'
+    | 'excludeDateIntervals'
+  > & {
+    label: string;
+    startName: Path<T>;
+    endName: Path<T>;
+    errors?: FieldErrors<T>;
+  };
 
 function CustomHeader(props: ReactDatePickerCustomHeaderProps) {
-  const handleDecrease: MouseEventHandler = event => {
+  const handleDecrease: MouseEventHandler = (event) => {
     event.preventDefault();
     props.decreaseMonth();
-  }
+  };
 
-  const handleIncrease: MouseEventHandler = event => {
+  const handleIncrease: MouseEventHandler = (event) => {
     event.preventDefault();
     props.increaseMonth();
-  }
+  };
 
   return (
     <div className="flex justify-between px-2">
@@ -51,7 +68,13 @@ function CustomHeader(props: ReactDatePickerCustomHeaderProps) {
   );
 }
 
-function DateRangePicker<T,>({ control, startName, endName, label, errors, ...rest }: Props<FieldValues>) {
+function DateRangePicker<T extends FieldValues>({
+  control,
+  startName,
+  endName,
+  label,
+  ...rest
+}: Props<T>) {
   const startController = useController({ control, name: startName });
   const endController = useController({ control, name: endName });
   const router = useRouter();
@@ -62,8 +85,13 @@ function DateRangePicker<T,>({ control, startName, endName, label, errors, ...re
 
     endController.field.onChange(end);
     endController.field.onBlur();
-    router.push("/?startDate=" + start.toISOString().slice(0,10) + "&endDate=" + end.toISOString().slice(0,10));
-  }
+    router.push(
+      '/?startDate=' +
+        start.toISOString().slice(0, 10) +
+        '&endDate=' +
+        end.toISOString().slice(0, 10)
+    );
+  };
 
   return (
     <div className="flex flex-col">
