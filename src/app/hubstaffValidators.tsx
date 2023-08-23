@@ -32,6 +32,7 @@ export const activitySchema = z
     tracked: z.number(),
     project_id: z.number(),
     created_at: z.string().datetime(),
+    user_id: z.number(),
   })
   .passthrough();
 export type HubstaffActivity = z.infer<typeof activitySchema>;
