@@ -85,12 +85,14 @@ function DateRangePicker<T extends FieldValues>({
 
     endController.field.onChange(end);
     endController.field.onBlur();
-    router.push(
-      '/?startDate=' +
-        start.toISOString().slice(0, 10) +
-        '&endDate=' +
-        end.toISOString().slice(0, 10)
-    );
+    if (end) {
+      router.push(
+        '/?startDate=' +
+          start.toISOString().slice(0, 10) +
+          '&endDate=' +
+          end.toISOString().slice(0, 10)
+      );
+    }
   };
 
   return (

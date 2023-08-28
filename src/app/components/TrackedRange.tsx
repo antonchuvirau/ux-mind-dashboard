@@ -31,8 +31,8 @@ const TrackedRange = ({ activities, date }: Props) => {
         placeholderText={`Select date range`}
         startName="period.start"
         endName="period.end"
-        minDate={date}
-        maxDate={addDays(lastDayOfMonth(date), 1)}
+        minDate={new Date('01-01-2023')}
+        maxDate={new Date('31-12-2023')}
         control={control}
         required
       />
