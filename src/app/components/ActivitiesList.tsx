@@ -3,7 +3,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 import Table from './ui/table';
 import { type HubstaffActivity } from '../hubstaffValidators';
 import { type HubstaffUser } from '../hubstaffValidators';
-import _ from "lodash";
+import _ from 'lodash';
 
 interface Props {
   activities: HubstaffActivity[];
@@ -11,13 +11,16 @@ interface Props {
 }
 
 const ActivitiesList = ({ activities, members }: Props) => {
-  const data = _.map(_.groupBy(activities, 'user_id'), (activities, user_id) => ({
-    user_id,
-    name: members.find((member) => member.id === Number(user_id))?.name,
-    tracked: Math.trunc(_.sumBy(activities, 'tracked') / 3600),
-  }));
+  const data = _.map(
+    _.groupBy(activities, 'user_id'),
+    (activities, user_id) => ({
+      user_id,
+      name: members.find((member) => member.id === Number(user_id))?.name,
+      tracked: _.sumBy(activities, 'tracked'),
+    })
+  );
 
-  const columnHelper = createColumnHelper<typeof data[0]>();
+  const columnHelper = createColumnHelper<(typeof data)[0]>();
 
   const columns = [
     columnHelper.accessor('user_id', {
@@ -28,9 +31,9 @@ const ActivitiesList = ({ activities, members }: Props) => {
     }),
     columnHelper.accessor('tracked', {
       header: 'Tracked (hours)',
+      cell: (info) => Math.trunc(info.getValue() / 3600),
     }),
   ];
-
 
   return (
     <section>
