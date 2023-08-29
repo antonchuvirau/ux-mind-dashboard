@@ -11,7 +11,13 @@ interface Props {
 }
 
 const ActivitiesList = ({ activities, members }: Props) => {
-  const columnHelper = createColumnHelper<HubstaffActivity>();
+  const data = _.map(_.groupBy(activities, 'user_id'), (activities, user_id) => ({
+    user_id,
+    name: members.find((member) => member.id === Number(user_id))?.name,
+    tracked: Math.trunc(_.sumBy(activities, 'tracked') / 3600),
+  }));
+
+  const columnHelper = createColumnHelper<typeof data[0]>();
 
   const columns = [
     columnHelper.accessor('user_id', {
@@ -25,28 +31,14 @@ const ActivitiesList = ({ activities, members }: Props) => {
     }),
   ];
 
-  const getTimeForUsers = (data: HubstaffActivity[]) => {
-    const timeData: {id: number, tracked: number}[] = [];
-    data.forEach(element => {
-      timeData.push({
-        id: 1,
-        tracked: 1,
-      });
-    });
-  }
-  const data = _.map(_.groupBy(activities, 'user_id'), (user, id) => ({
-    user_id: id,
-    name: members.find((member) => member.id === Number(id))?.name,
-    tracked: Math.trunc(_.sumBy(user, 'tracked') / 3600),
-  }));
 
   return (
-    <div>
-      <div className="text-primary mb-2 mt-0 text-5xl font-medium leading-tight">
+    <section>
+      <h2 className="text-primary mb-2 mt-0 text-5xl font-medium leading-tight">
         Activities
-      </div>
+      </h2>
       <Table data={data} columns={columns} />
-    </div>
+    </section>
   );
 };
 
