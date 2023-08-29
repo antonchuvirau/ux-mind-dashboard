@@ -5,6 +5,7 @@ import useZodForm from '@/utils/useZodForm';
 import { z } from 'zod';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { addMinutes } from 'date-fns';
 
 interface Props {
   activities: HubstaffActivity[];
@@ -23,15 +24,20 @@ const TrackedRange = ({ activities }: Props) => {
 
   const formState = watch();
   useEffect(() => {
+    // Dates from react-datepicker are in local tz
+    const tzOffsetMinutes = new Date().getTimezoneOffset();
+
     if (formState.end) {
       router.push(
         '/?startDate=' +
-          formState.start.toISOString().slice(0, 10) +
+          addMinutes(formState.start, -tzOffsetMinutes)
+            .toISOString()
+            .slice(0, 10) +
           '&endDate=' +
-          formState.end.toISOString().slice(0, 10)
+          addMinutes(formState.end, -tzOffsetMinutes).toISOString().slice(0, 10)
       );
     }
-  }, [formState, router])
+  }, [formState, router]);
 
   const trackedTime = activities.reduce(
     (sum, activity) => (activity.tracked ? sum + activity.tracked : sum),
