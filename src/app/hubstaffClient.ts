@@ -13,7 +13,7 @@ import {
   projectSchema,
   userSchema,
 } from './hubstaffValidators';
-import { differenceInCalendarDays } from 'date-fns';
+import { differenceInCalendarDays, eachDayOfInterval } from 'date-fns';
 import addDays from 'date-fns/addDays';
 
 const BASE_URL = 'https://api.hubstaff.com/v2';
@@ -181,109 +181,54 @@ class HubstaffClient {
     stopTime: Date,
     pageId?: number
   ): Promise<HubstaffActivity[]> {
-    const difference = differenceInCalendarDays(stopTime, startTime);
-    if (difference > 7) {
-      const numberOfIntervals = Math.trunc(difference / 7);
-      const dateIntervals: { startTime: Date, stopTime: Date }[] = [];
-      let lastInterval = 0;
-      if (difference % 7 > 0) {
-        lastInterval = difference % 7;
-      }
-      let lastDate = startTime;
-      for (let i = 0; i < numberOfIntervals; i++) {
-        dateIntervals.push({
-          startTime: lastDate,
-          stopTime: addDays(lastDate, 7),
-        });
-        lastDate = addDays(lastDate, 7);
-      }
-      if (lastInterval > 0) {
-        dateIntervals.push({
-          startTime: lastDate,
-          stopTime: stopTime,
-        });
-      }
-      let resArray: {
-        activities: HubstaffActivity[],
-        pagination: {
-          next_page_start_id: number,
-        }
-      }[] = [];
-      const requests: any[] = [];
-      dateIntervals.forEach((interval: { startTime: Date, stopTime: Date }) => {
-        const params = new URLSearchParams({
-          page_limit: PAGE_LIMIT.toString(),
-          page_start_id: pageId?.toString() || '',
-          'time_slot[start]': interval.startTime.toISOString(),
-          'time_slot[stop]': interval.stopTime.toISOString(),
-        });
-        const res = this.request(
-          `/organizations/${ORG_ID}/activities?${params.toString()}`,
-          { next: { revalidate: 3600 } }
-        );
-        requests.push(res);
-      });
-      resArray = await Promise.all(requests);
-      //console.log(resArray);
-      let activities: HubstaffActivity[] = [];
-      //console.log("dateIntervals");
-      //console.log(dateIntervals);
-      let i = 0;
-      for (const item of resArray) {
-        //console.log("dateIntervals");
-        //console.log(dateIntervals[i].startTime);
-        //console.log(dateIntervals[i].stopTime);
-        const nextPageActivities = item.pagination?.next_page_start_id
-        ? await this.getActivities(
-            dateIntervals[i].startTime,
-            dateIntervals[i].stopTime,
-            item.pagination.next_page_start_id
-          )
-        : [];
-        //console.log(item.pagination?.next_page_start_id);
-        //console.log(activities.length);
-        activities = activities.concat(item.activities).concat(nextPageActivities);
-        i++;
-        //console.log(activities.length);
-        //console.log(nextPageActivities.length);
-        //console.log(item.pagination?.next_page_start_id);
-        //console.log(i + " iteration lenght");
-        //console.log(activities.length);
-      };
-      //console.log("after");
-      //console.log(activities);
-      console.log("res lenght");
-      console.log(activities.length);
-      return activities;
-    } else {
-      const params = new URLSearchParams({
-        page_limit: PAGE_LIMIT.toString(),
-        page_start_id: pageId?.toString() || '',
-        'time_slot[start]': startTime.toISOString(),
-        'time_slot[stop]': stopTime.toISOString(),
-      });
-      const res = await this.request(
-        `/organizations/${ORG_ID}/activities?${params.toString()}`,
-        { next: { revalidate: 3600 } }
+    const days = eachDayOfInterval({
+      // We shift interval by 1 day to get correct dates within the interval
+      start: addDays(startTime, 1),
+      end: addDays(stopTime, 1),
+    });
+
+    if (days.length > 7) {
+      // Hubstaff doesn't allow to fetch more than 7 days in 1 request,
+      // so getActivities separately for each 7-day (or less) chunk
+      const dayChunks = _.chunk(days, 7);
+      const results = await Promise.all(
+        dayChunks.map((dayChunk) =>
+          this.getActivities(dayChunk[0], dayChunk[dayChunk.length - 1])
+        )
       );
 
-      const { activities, pagination } = z
-        .object({
-          activities: activitySchema.array(),
-          pagination: paginationSchema,
-        })
-        .parse(res);
-
-      const nextPageActivities = pagination?.next_page_start_id
-        ? await this.getActivities(
-            startTime,
-            stopTime,
-            pagination.next_page_start_id
-          )
-        : [];
-
-      return [...activities, ...nextPageActivities];
+      return _.flatten(results);
     }
+
+    const params = new URLSearchParams({
+      page_limit: PAGE_LIMIT.toString(),
+      page_start_id: pageId?.toString() || '',
+      'time_slot[start]': startTime.toISOString(),
+      'time_slot[stop]': stopTime.toISOString(),
+    });
+
+    console.log('Fetching dates ', startTime, stopTime);
+    const res = await this.request(
+      `/organizations/${ORG_ID}/activities?${params.toString()}`,
+      { next: { revalidate: 3600 } }
+    );
+
+    const { activities, pagination } = z
+      .object({
+        activities: activitySchema.array(),
+        pagination: paginationSchema,
+      })
+      .parse(res);
+
+    const nextPageActivities = pagination?.next_page_start_id
+      ? await this.getActivities(
+          startTime,
+          stopTime,
+          pagination.next_page_start_id
+        )
+      : [];
+
+    return [...activities, ...nextPageActivities];
   }
 }
 
