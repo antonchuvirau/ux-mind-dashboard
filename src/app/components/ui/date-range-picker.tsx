@@ -11,12 +11,11 @@ import {
 } from 'react-hook-form';
 import { format } from 'date-fns';
 import Label from './label';
-import { useRouter } from 'next/navigation';
 import 'react-datepicker/dist/react-datepicker.css';
 import { type MouseEventHandler } from 'react';
 
 type Props<T extends FieldValues> = Omit<
-  UseControllerProps<FieldValues>,
+  UseControllerProps<T>,
   'name'
 > &
   Pick<
@@ -77,7 +76,6 @@ function DateRangePicker<T extends FieldValues>({
 }: Props<T>) {
   const startController = useController({ control, name: startName });
   const endController = useController({ control, name: endName });
-  const router = useRouter();
 
   const handleChange = ([start, end]: [Date, Date]) => {
     startController.field.onChange(start);
@@ -85,14 +83,6 @@ function DateRangePicker<T extends FieldValues>({
 
     endController.field.onChange(end);
     endController.field.onBlur();
-    if (end) {
-      router.push(
-        '/?startDate=' +
-          start.toISOString().slice(0, 10) +
-          '&endDate=' +
-          end.toISOString().slice(0, 10)
-      );
-    }
   };
 
   return (
