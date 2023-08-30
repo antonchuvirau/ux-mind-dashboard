@@ -13,7 +13,11 @@ import {
   projectSchema,
   userSchema,
 } from './hubstaffValidators';
-import { differenceInCalendarDays, eachDayOfInterval } from 'date-fns';
+import {
+  differenceInCalendarDays,
+  differenceInDays,
+  eachDayOfInterval,
+} from 'date-fns';
 import addDays from 'date-fns/addDays';
 
 const BASE_URL = 'https://api.hubstaff.com/v2';
@@ -181,20 +185,26 @@ class HubstaffClient {
     stopTime: Date,
     pageId?: number
   ): Promise<HubstaffActivity[]> {
-    const days = eachDayOfInterval({
-      // We shift interval by 1 day to get correct dates within the interval
-      start: addDays(startTime, 1),
-      end: addDays(stopTime, 1),
-    });
+    // Hubstaff doesn't allow to fetch more than 1 week in 1 request.
+    if (differenceInDays(stopTime, startTime) > 7) {
+      // Break our interval [startTime, stopTime] into
+      // multiple sub-intervals, each of them is 1 week max
+      const points = [
+        ..._.range(
+          startTime.getTime(),
+          stopTime.getTime(),
+          1000 * 60 * 60 * 24 * 7 // 1 week in milliseconds
+        ).map((ms) => new Date(ms)),
+        stopTime, // End of the range was not included
+      ];
+      const intervals = _.zip(points, points.slice(1)).slice(0, -1);
 
-    if (days.length > 7) {
-      // Hubstaff doesn't allow to fetch more than 7 days in 1 request,
-      // so getActivities separately for each 7-day (or less) chunk
-      const dayChunks = _.chunk(days, 7);
       const results = await Promise.all(
-        dayChunks.map((dayChunk) =>
-          this.getActivities(dayChunk[0], dayChunk[dayChunk.length - 1])
-        )
+        intervals.map((interval) => {
+          if (!interval[0] || !interval[1])
+            throw new Error(`Wrong interval: ${JSON.stringify(interval)}`);
+          return this.getActivities(interval[0], interval[1]);
+        })
       );
 
       return _.flatten(results);
@@ -207,7 +217,7 @@ class HubstaffClient {
       'time_slot[stop]': stopTime.toISOString(),
     });
 
-    console.log('Fetching dates ', startTime, stopTime);
+    console.log('Fetching dates ', startTime, stopTime, pageId);
     const res = await this.request(
       `/organizations/${ORG_ID}/activities?${params.toString()}`,
       { next: { revalidate: 3600 } }
