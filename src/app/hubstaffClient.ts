@@ -13,7 +13,11 @@ import {
   projectSchema,
   userSchema,
 } from './hubstaffValidators';
-import { differenceInCalendarDays } from 'date-fns';
+import {
+  differenceInCalendarDays,
+  differenceInDays,
+  eachDayOfInterval,
+} from 'date-fns';
 import addDays from 'date-fns/addDays';
 
 const BASE_URL = 'https://api.hubstaff.com/v2';
@@ -181,109 +185,60 @@ class HubstaffClient {
     stopTime: Date,
     pageId?: number
   ): Promise<HubstaffActivity[]> {
-    const difference = differenceInCalendarDays(stopTime, startTime);
-    if (difference > 7) {
-      const numberOfIntervals = Math.trunc(difference / 7);
-      const dateIntervals: { startTime: Date, stopTime: Date }[] = [];
-      let lastInterval = 0;
-      if (difference % 7 > 0) {
-        lastInterval = difference % 7;
-      }
-      let lastDate = startTime;
-      for (let i = 0; i < numberOfIntervals; i++) {
-        dateIntervals.push({
-          startTime: lastDate,
-          stopTime: addDays(lastDate, 7),
-        });
-        lastDate = addDays(lastDate, 7);
-      }
-      if (lastInterval > 0) {
-        dateIntervals.push({
-          startTime: lastDate,
-          stopTime: stopTime,
-        });
-      }
-      let resArray: {
-        activities: HubstaffActivity[],
-        pagination: {
-          next_page_start_id: number,
-        }
-      }[] = [];
-      const requests: any[] = [];
-      dateIntervals.forEach((interval: { startTime: Date, stopTime: Date }) => {
-        const params = new URLSearchParams({
-          page_limit: PAGE_LIMIT.toString(),
-          page_start_id: pageId?.toString() || '',
-          'time_slot[start]': interval.startTime.toISOString(),
-          'time_slot[stop]': interval.stopTime.toISOString(),
-        });
-        const res = this.request(
-          `/organizations/${ORG_ID}/activities?${params.toString()}`,
-          { next: { revalidate: 3600 } }
-        );
-        requests.push(res);
-      });
-      resArray = await Promise.all(requests);
-      //console.log(resArray);
-      let activities: HubstaffActivity[] = [];
-      //console.log("dateIntervals");
-      //console.log(dateIntervals);
-      let i = 0;
-      for (const item of resArray) {
-        //console.log("dateIntervals");
-        //console.log(dateIntervals[i].startTime);
-        //console.log(dateIntervals[i].stopTime);
-        const nextPageActivities = item.pagination?.next_page_start_id
-        ? await this.getActivities(
-            dateIntervals[i].startTime,
-            dateIntervals[i].stopTime,
-            item.pagination.next_page_start_id
-          )
-        : [];
-        //console.log(item.pagination?.next_page_start_id);
-        //console.log(activities.length);
-        activities = activities.concat(item.activities).concat(nextPageActivities);
-        i++;
-        //console.log(activities.length);
-        //console.log(nextPageActivities.length);
-        //console.log(item.pagination?.next_page_start_id);
-        //console.log(i + " iteration lenght");
-        //console.log(activities.length);
-      };
-      //console.log("after");
-      //console.log(activities);
-      console.log("res lenght");
-      console.log(activities.length);
-      return activities;
-    } else {
-      const params = new URLSearchParams({
-        page_limit: PAGE_LIMIT.toString(),
-        page_start_id: pageId?.toString() || '',
-        'time_slot[start]': startTime.toISOString(),
-        'time_slot[stop]': stopTime.toISOString(),
-      });
-      const res = await this.request(
-        `/organizations/${ORG_ID}/activities?${params.toString()}`,
-        { next: { revalidate: 3600 } }
+    // Hubstaff doesn't allow to fetch more than 1 week in 1 request.
+    if (differenceInDays(stopTime, startTime) > 7) {
+      // Break our interval [startTime, stopTime] into
+      // multiple sub-intervals, each of them is 1 week max
+      const points = [
+        ..._.range(
+          startTime.getTime(),
+          stopTime.getTime(),
+          1000 * 60 * 60 * 24 * 7 // 1 week in milliseconds
+        ).map((ms) => new Date(ms)),
+        stopTime, // End of the range was not included
+      ];
+      const intervals = _.zip(points, points.slice(1)).slice(0, -1);
+
+      const results = await Promise.all(
+        intervals.map((interval) => {
+          if (!interval[0] || !interval[1])
+            throw new Error(`Wrong interval: ${JSON.stringify(interval)}`);
+          return this.getActivities(interval[0], interval[1]);
+        })
       );
 
-      const { activities, pagination } = z
-        .object({
-          activities: activitySchema.array(),
-          pagination: paginationSchema,
-        })
-        .parse(res);
-
-      const nextPageActivities = pagination?.next_page_start_id
-        ? await this.getActivities(
-            startTime,
-            stopTime,
-            pagination.next_page_start_id
-          )
-        : [];
-
-      return [...activities, ...nextPageActivities];
+      return _.flatten(results);
     }
+
+    const params = new URLSearchParams({
+      page_limit: PAGE_LIMIT.toString(),
+      page_start_id: pageId?.toString() || '',
+      'time_slot[start]': startTime.toISOString(),
+      'time_slot[stop]': stopTime.toISOString(),
+    });
+
+    console.log('Fetching dates ', startTime, stopTime, pageId);
+    const res = await this.request(
+      `/organizations/${ORG_ID}/activities?${params.toString()}`,
+      { next: { revalidate: 3600 } }
+    );
+
+    const { activities, pagination } = z
+      .object({
+        activities: activitySchema.array(),
+        pagination: paginationSchema,
+      })
+      .parse(res);
+
+    const nextPageActivities = pagination?.next_page_start_id
+      ? await this.getActivities(
+          startTime,
+          stopTime,
+          pagination.next_page_start_id
+        )
+      : [];
+
+    return [...activities, ...nextPageActivities];
   }
 }
 

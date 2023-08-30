@@ -5,6 +5,7 @@ import useZodForm from '@/utils/useZodForm';
 import { z } from 'zod';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { addDays } from 'date-fns';
 
 interface Props {
   activities: HubstaffActivity[];
@@ -24,14 +25,15 @@ const TrackedRange = ({ activities }: Props) => {
   const formState = watch();
   useEffect(() => {
     if (formState.end) {
-      router.push(
-        '/?startDate=' +
-          formState.start.toISOString().slice(0, 10) +
-          '&endDate=' +
-          formState.end.toISOString().slice(0, 10)
+      router.push('?' +
+        new URLSearchParams({
+          startDate: formState.start.toISOString(),
+          // Add an extra day because range should include the last day
+          endDate: addDays(formState.end, 1).toISOString(),
+        }).toString()
       );
     }
-  }, [formState, router])
+  }, [formState, router]);
 
   const trackedTime = activities.reduce(
     (sum, activity) => (activity.tracked ? sum + activity.tracked : sum),
