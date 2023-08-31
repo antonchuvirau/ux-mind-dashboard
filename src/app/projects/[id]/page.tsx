@@ -1,6 +1,8 @@
 import HubstaffClient from '@/app/hubstaffClient';
+import ActivitiesList from '../../components/ActivitiesList';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid';
 import { type Metadata } from 'next';
+import TrackedRange from '../../components/TrackedRange';
 import Link from 'next/link';
 import { cache } from 'react';
 import { prisma } from '../../../server/db';
@@ -15,6 +17,7 @@ interface Props {
   params: {
     id: string;
   };
+  searchParams: { [key: string]: string | string[] | undefined };
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -22,7 +25,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return { title: project.name };
 }
 
-export default async function SingleProject({ params }: Props) {
+export default async function SingleProject({
+    params,
+    searchParams,
+  }: Props
+) {
   const project = await getProject(params.id);
   const client = new HubstaffClient();
   const hubstaffProject = project.hubstaffId
@@ -33,6 +40,16 @@ export default async function SingleProject({ params }: Props) {
     : null;
 
   console.log({ project, hubstaffProject });
+
+  const activities = (await client.getActivities(
+    searchParams.startDate
+    ? new Date(String(searchParams.startDate))
+    : new Date(),
+    searchParams.endDate
+    ? new Date(String(searchParams.endDate))
+    : new Date(),
+  ));
+  const members = await client.getOrganizationMembers();
 
   return (
     <main className="container mx-auto py-10">
@@ -65,20 +82,35 @@ export default async function SingleProject({ params }: Props) {
       </div>
 
       {hubstaffProject && (
-        <section className="my-10">
-          <h1 className="text-xl font-bold">Hubstaff data</h1>
-          <p>Name: {hubstaffProject.name}</p>
-          <Link
-            href={`https://app.hubstaff.com/projects/${
-              hubstaffProject.id || ''
-            }`}
-            className="mt-4 flex gap-2 underline"
-            target="_blank"
-          >
-            <ArrowTopRightOnSquareIcon className="h-6 w-6" />
-            Open in Hubstaff
-          </Link>
-        </section>
+        <>
+          <section className="my-10">
+            <h1 className="text-xl font-bold">Hubstaff data</h1>
+            <p>Name: {hubstaffProject.name}</p>
+            <Link
+              href={`https://app.hubstaff.com/projects/${
+                hubstaffProject.id || ''
+              }`}
+              className="mt-4 flex gap-2 underline"
+              target="_blank"
+            >
+              <ArrowTopRightOnSquareIcon className="h-6 w-6" />
+              Open in Hubstaff
+            </Link>
+          </section>
+          <section className="my-10">
+            <TrackedRange activities={
+              activities.filter((elem) => elem.project_id === hubstaffProject.id)
+            } />
+          </section>
+          <section className="my-10">
+            <ActivitiesList
+              activities={
+                activities.filter((elem) => elem.project_id === hubstaffProject.id)
+              }
+              members={members}
+            />
+          </section>
+        </>
       )}
     </main>
   );
