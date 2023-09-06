@@ -41,14 +41,19 @@ export default async function SingleProject({
 
   console.log({ project, hubstaffProject });
 
-  const activities = (await client.getActivities(
-    searchParams.startDate
-    ? new Date(String(searchParams.startDate))
-    : new Date(),
-    searchParams.endDate
-    ? new Date(String(searchParams.endDate))
-    : new Date(),
-  ));
+  const activities = project.hubstaffId
+    ? await client.getActivities(
+        searchParams.startDate
+        ? new Date(String(searchParams.startDate))
+        : new Date(),
+        searchParams.endDate
+        ? new Date(String(searchParams.endDate))
+        : new Date(),
+        undefined,
+        Number(project.hubstaffId),
+      )
+    : null;
+
   const members = await client.getOrganizationMembers();
 
   return (
@@ -98,17 +103,17 @@ export default async function SingleProject({
             </Link>
           </section>
           <section className="my-10">
-            <TrackedRange activities={
-              activities.filter((elem) => elem.project_id === hubstaffProject.id)
-            } />
+            {activities &&
+              <TrackedRange
+                activities={activities}
+              />}
           </section>
           <section className="my-10">
-            <ActivitiesList
-              activities={
-                activities.filter((elem) => elem.project_id === hubstaffProject.id)
-              }
-              members={members}
-            />
+            {activities &&
+              <ActivitiesList
+                activities={activities}
+                members={members}
+              />}
           </section>
         </>
       )}

@@ -183,7 +183,8 @@ class HubstaffClient {
   async getActivities(
     startTime: Date,
     stopTime: Date,
-    pageId?: number
+    pageId?: number,
+    projectID?: number,
   ): Promise<HubstaffActivity[]> {
     // Hubstaff doesn't allow to fetch more than 1 week in 1 request.
     if (differenceInDays(stopTime, startTime) > 7) {
@@ -218,7 +219,12 @@ class HubstaffClient {
     });
 
     console.log('Fetching dates ', startTime, stopTime, pageId);
-    const res = await this.request(
+    const res = projectID
+    ? await this.request(
+      `/projects/${projectID}/activities?${params.toString()}`,
+      { next: { revalidate: 3600 } }
+    )
+    : await this.request(
       `/organizations/${ORG_ID}/activities?${params.toString()}`,
       { next: { revalidate: 3600 } }
     );
@@ -231,11 +237,18 @@ class HubstaffClient {
       .parse(res);
 
     const nextPageActivities = pagination?.next_page_start_id
-      ? await this.getActivities(
-          startTime,
-          stopTime,
-          pagination.next_page_start_id
-        )
+      ? projectID
+        ? await this.getActivities(
+            startTime,
+            stopTime,
+            pagination.next_page_start_id,
+            projectID,
+          )
+        : await this.getActivities(
+            startTime,
+            stopTime,
+            pagination.next_page_start_id,
+          )
       : [];
 
     return [...activities, ...nextPageActivities];
