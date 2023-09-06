@@ -32,27 +32,23 @@ export default async function SingleProject({
 ) {
   const project = await getProject(params.id);
   const client = new HubstaffClient();
-  const hubstaffProject = project.hubstaffId
-    ? await client.getProject(Number(project.hubstaffId)).catch((e) => {
-        console.log(e);
-        return null;
-      })
-    : null;
+  const hubstaffProject = await client.getProject(Number(project.hubstaffId)).catch((e) => {
+    console.log(e);
+    return null;
+  });
 
   console.log({ project, hubstaffProject });
 
-  const activities = project.hubstaffId
-    ? await client.getActivities(
-        searchParams.startDate
-        ? new Date(String(searchParams.startDate))
-        : new Date(),
-        searchParams.endDate
-        ? new Date(String(searchParams.endDate))
-        : new Date(),
-        undefined,
-        Number(project.hubstaffId),
-      )
-    : null;
+  const activities = await client.getActivities(
+    searchParams.startDate
+    ? new Date(String(searchParams.startDate))
+    : new Date(),
+    searchParams.endDate
+    ? new Date(String(searchParams.endDate))
+    : new Date(),
+    undefined,
+    Number(project.hubstaffId),
+  );
 
   const members = await client.getOrganizationMembers();
 
