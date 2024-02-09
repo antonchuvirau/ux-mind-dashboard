@@ -2,7 +2,7 @@
  
 import { prisma } from '../../server/db';
 import { revalidatePath } from 'next/cache';
-import { schema } from '../components/ui/projectForm/ProjectForm';
+import { schema } from '../components/ui/project-form';
 import { type z } from 'zod';
 
 type Project = z.infer<typeof schema>;

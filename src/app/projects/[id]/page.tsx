@@ -1,8 +1,8 @@
-import HubstaffClient from '@/app/hubstaffClient';
-import ActivitiesList from '../../components/ActivitiesList';
+import HubstaffClient from '@/app/hubstaff-client';
+import ActivitiesList from '../../components/activities-list';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid';
 import { type Metadata } from 'next';
-import TrackedRange from '../../components/TrackedRange';
+import TrackedRange from '../../components/tracked-range';
 import Link from 'next/link';
 import { cache } from 'react';
 import { prisma } from '../../../server/db';

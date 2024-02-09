@@ -1,9 +1,9 @@
 "use client";
-import Button from '../button';
-import Input from '../input';
-import useZodForm from '../../../hooks/useZodForm';
+import Button from './button';
+import Input from './input';
+import useZodForm from '../../hooks/use-zod-form';
 import { z } from 'zod';
-import { addProject, editProject } from '../../../actions/actions';
+import { addProject, editProject } from '../../actions/actions';
 import { useRouter } from 'next/navigation';
 import { type Project } from '@prisma/client';
 

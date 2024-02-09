@@ -12,7 +12,7 @@ import {
   paginationSchema,
   projectSchema,
   userSchema,
-} from './hubstaffValidators';
+} from './hubstaff-validators';
 import {
   differenceInCalendarDays,
   differenceInDays,

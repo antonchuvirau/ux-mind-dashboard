@@ -1,8 +1,8 @@
-import ActivitiesList from './components/ActivitiesList';
-import MembersList from './components/MembersList';
-import ProjectsList from './components/ProjectsList';
-import TrackedRange from './components/TrackedRange';
-import HubstaffClient from './hubstaffClient';
+import ActivitiesList from './components/activities-list';
+import MembersList from './components/members-list';
+import ProjectsList from './components/projects-list';
+import TrackedRange from './components/tracked-range';
+import HubstaffClient from './hubstaff-client';
 
 export default async function Home({
   params,

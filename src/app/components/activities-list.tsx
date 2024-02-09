@@ -1,8 +1,8 @@
 'use client';
 import { createColumnHelper } from '@tanstack/react-table';
 import Table from './ui/table';
-import { type HubstaffActivity } from '../hubstaffValidators';
-import { type HubstaffUser } from '../hubstaffValidators';
+import { type HubstaffActivity } from '../hubstaff-validators';
+import { type HubstaffUser } from '../hubstaff-validators';
 import _ from 'lodash';
 
 interface Props {

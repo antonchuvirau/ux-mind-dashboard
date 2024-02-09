@@ -1,7 +1,7 @@
 'use client';
 import { createColumnHelper } from '@tanstack/react-table';
 import Table from './ui/table';
-import { type HubstaffUser } from '../hubstaffValidators';
+import { type HubstaffUser } from '../hubstaff-validators';
 
 interface Props {
   members: HubstaffUser[];
