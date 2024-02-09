@@ -117,6 +117,7 @@ class HubstaffClient {
   }
 
   async getProject(id: number) {
+    // eslint-disable-next-line
     const res = await this.get(`projects/${id}`, {
       next: { revalidate: 60 },
     });
@@ -136,6 +137,7 @@ class HubstaffClient {
       page_start_id: pageId?.toString() || '',
     });
 
+    // eslint-disable-next-line
     const res = await this.request(
       `/organizations/${ORG_ID}/projects?${params.toString()}`,
       { next: { revalidate: 3600 } },
@@ -156,6 +158,7 @@ class HubstaffClient {
   }
 
   async getUser(id: number) {
+    // eslint-disable-next-line
     const res = await this.get(`users/${id}`, {
       next: { revalidate: 3600 },
     });
@@ -171,6 +174,7 @@ class HubstaffClient {
   async getOrganizationMembers() {
     const params = new URLSearchParams({ page_limit: PAGE_LIMIT.toString() });
 
+    // eslint-disable-next-line
     const res = await this.request(
       `/organizations/${ORG_ID}/members?${params.toString()}`,
       { next: { revalidate: 3600 } },
@@ -226,6 +230,8 @@ class HubstaffClient {
     });
 
     // console.log('Fetching dates ', startTime, stopTime, pageId);
+
+    // eslint-disable-next-line
     const res = projectID
       ? await this.request(
           `/projects/${projectID}/activities?${params.toString()}`,
