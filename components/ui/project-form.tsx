@@ -9,7 +9,7 @@ import Input from '@/components/ui/input';
 
 import { useZodForm } from '@/hooks/use-zod-form';
 
-import { addProject, editProject } from '@/actions/actions';
+import { addProject, editProject } from '@/app/projects/actions';
 
 interface Props {
   defaultValues?: Project;

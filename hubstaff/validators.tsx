@@ -14,6 +14,7 @@ export const projectSchema = z
     status: z.string(),
   })
   .passthrough();
+
 export type HubstaffProject = z.infer<typeof projectSchema>;
 
 export const userSchema = z
@@ -24,6 +25,7 @@ export const userSchema = z
     status: z.string(),
   })
   .passthrough();
+
 export type HubstaffUser = z.infer<typeof userSchema>;
 
 export const activitySchema = z
@@ -35,4 +37,5 @@ export const activitySchema = z
     user_id: z.number(),
   })
   .passthrough();
+
 export type HubstaffActivity = z.infer<typeof activitySchema>;
