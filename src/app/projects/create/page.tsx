@@ -1,6 +1,3 @@
-import { prisma } from '../../../server/db';
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 import ProjectForm from '../../components/ui/project-form';
 
 export const metadata = {

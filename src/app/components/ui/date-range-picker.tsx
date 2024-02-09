@@ -14,10 +14,7 @@ import Label from './label';
 import 'react-datepicker/dist/react-datepicker.css';
 import { type MouseEventHandler } from 'react';
 
-type Props<T extends FieldValues> = Omit<
-  UseControllerProps<T>,
-  'name'
-> &
+type Props<T extends FieldValues> = Omit<UseControllerProps<T>, 'name'> &
   Pick<
     ReactDatePickerProps,
     | 'minDate'

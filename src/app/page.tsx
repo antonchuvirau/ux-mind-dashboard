@@ -5,11 +5,10 @@ import TrackedRange from './components/tracked-range';
 import HubstaffClient from './hubstaff-client';
 
 export default async function Home({
-  params,
   searchParams,
 }: {
-  params: { slug: string }
-  searchParams: { [key: string]: string | string[] | undefined }
+  params: { slug: string };
+  searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const client = new HubstaffClient();
   const members = await client.getOrganizationMembers();
@@ -20,17 +19,15 @@ export default async function Home({
   );*/
   const activities = await client.getActivities(
     searchParams.startDate
-    ? new Date(String(searchParams.startDate))
-    : new Date(),
-    searchParams.endDate
-    ? new Date(String(searchParams.endDate))
-    : new Date(),
+      ? new Date(String(searchParams.startDate))
+      : new Date(),
+    searchParams.endDate ? new Date(String(searchParams.endDate)) : new Date()
   );
 
   return (
     <main className="container mx-auto py-10">
       <TrackedRange activities={activities} />
-      <ActivitiesList activities={activities} members={members}/>
+      <ActivitiesList activities={activities} members={members} />
       <MembersList members={members} />
       <ProjectsList projects={projects} />
     </main>

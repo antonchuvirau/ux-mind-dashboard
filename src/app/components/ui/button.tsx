@@ -1,4 +1,5 @@
-import { ButtonHTMLAttributes } from 'react';
+import { type ButtonHTMLAttributes } from 'react';
+
 import Spinner from './spinner';
 
 type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -18,13 +19,13 @@ export default function Button({
     <button
       type="submit"
       className={`
-        px-12 py-3 sm:w-fit w-full rounded-full
-        flex items-center justify-center relative
-        whitespace-nowrap font-bold text-md
+        text-md relative flex w-full items-center
+        justify-center whitespace-nowrap rounded-full bg-black
+        px-12 py-3 font-bold
+        uppercase
+        text-white
         disabled:cursor-not-allowed
-        disabled:bg-gray-400
-        bg-black
-        text-white uppercase
+        disabled:bg-gray-400 sm:w-fit
         ${isLoading ? 'cursor-progress' : ''}
         ${variant === 'primary' ? 'bg-primary' : ''}
         ${variant === 'secondary' ? 'bg-secondary' : ''}
@@ -34,7 +35,7 @@ export default function Button({
     >
       {children}
       {isLoading && (
-        <Spinner className="h-full w-6 aspect-square right-2 absolute top-0 bottom-0" />
+        <Spinner className="absolute bottom-0 right-2 top-0 aspect-square h-full w-6" />
       )}
     </button>
   );

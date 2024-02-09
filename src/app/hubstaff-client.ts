@@ -13,12 +13,7 @@ import {
   projectSchema,
   userSchema,
 } from './hubstaff-validators';
-import {
-  differenceInCalendarDays,
-  differenceInDays,
-  eachDayOfInterval,
-} from 'date-fns';
-import addDays from 'date-fns/addDays';
+import { differenceInDays } from 'date-fns';
 
 const BASE_URL = 'https://api.hubstaff.com/v2';
 const ORG_ID = process.env.ORGANIZATION_ID || '';
@@ -184,7 +179,7 @@ class HubstaffClient {
     startTime: Date,
     stopTime: Date,
     pageId?: number,
-    projectID?: number,
+    projectID?: number
   ): Promise<HubstaffActivity[]> {
     // Hubstaff doesn't allow to fetch more than 1 week in 1 request.
     if (differenceInDays(stopTime, startTime) > 7) {
@@ -220,14 +215,14 @@ class HubstaffClient {
 
     console.log('Fetching dates ', startTime, stopTime, pageId);
     const res = projectID
-    ? await this.request(
-      `/projects/${projectID}/activities?${params.toString()}`,
-      { next: { revalidate: 3600 } }
-    )
-    : await this.request(
-      `/organizations/${ORG_ID}/activities?${params.toString()}`,
-      { next: { revalidate: 3600 } }
-    );
+      ? await this.request(
+          `/projects/${projectID}/activities?${params.toString()}`,
+          { next: { revalidate: 3600 } }
+        )
+      : await this.request(
+          `/organizations/${ORG_ID}/activities?${params.toString()}`,
+          { next: { revalidate: 3600 } }
+        );
 
     const { activities, pagination } = z
       .object({
@@ -242,12 +237,12 @@ class HubstaffClient {
             startTime,
             stopTime,
             pagination.next_page_start_id,
-            projectID,
+            projectID
           )
         : await this.getActivities(
             startTime,
             stopTime,
-            pagination.next_page_start_id,
+            pagination.next_page_start_id
           )
       : [];
 

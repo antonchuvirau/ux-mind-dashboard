@@ -1,4 +1,3 @@
-"use client";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, type UseFormProps } from 'react-hook-form';
 import { type z } from 'zod';
@@ -16,4 +15,4 @@ function useZodForm<TSchema extends z.ZodType>(
   return form;
 }
 
-export default useZodForm;
+export { useZodForm };

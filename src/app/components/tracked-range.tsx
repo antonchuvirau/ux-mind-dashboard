@@ -1,7 +1,8 @@
 'use client';
+
 import { type HubstaffActivity } from '../hubstaff-validators';
 import DateRangePicker from './ui/date-range-picker';
-import useZodForm from '@/utils/use-zod-form';
+import { useZodForm } from './../hooks/use-zod-form';
 import { z } from 'zod';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -25,12 +26,13 @@ const TrackedRange = ({ activities }: Props) => {
   const formState = watch();
   useEffect(() => {
     if (formState.end) {
-      router.push('?' +
-        new URLSearchParams({
-          startDate: formState.start.toISOString(),
-          // Add an extra day because range should include the last day
-          endDate: addDays(formState.end, 1).toISOString(),
-        }).toString()
+      router.push(
+        '?' +
+          new URLSearchParams({
+            startDate: formState.start.toISOString(),
+            // Add an extra day because range should include the last day
+            endDate: addDays(formState.end, 1).toISOString(),
+          }).toString()
       );
     }
   }, [formState, router]);
