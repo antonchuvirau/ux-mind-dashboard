@@ -11,8 +11,9 @@ interface Props {
 }
 
 const InnerProjectsList = ({ projects }: Props) => {
-  const columnHelper = createColumnHelper<Project>();
   const router = useRouter();
+
+  const columnHelper = createColumnHelper<Project>();
 
   const columns = [
     columnHelper.accessor('id', {

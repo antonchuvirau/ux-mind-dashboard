@@ -10,7 +10,7 @@ import { useEffect } from 'react';
 
 interface Props<T> {
   data: T[];
-  columns: ColumnDef<T, any>[];
+  columns: ColumnDef<T, any>[]; // eslint-disable-line
   onRowClick?: (row: T) => void;
   onPageChange?: (rows: T[]) => void;
   isLoading?: boolean;
