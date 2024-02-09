@@ -2,7 +2,7 @@
 
 import { createColumnHelper } from '@tanstack/react-table';
 import Table from './ui/table';
-import { type HubstaffProject } from '../hubstaff-validators';
+import { type HubstaffProject } from '../app/hubstaff-validators';
 
 interface Props {
   projects: HubstaffProject[];

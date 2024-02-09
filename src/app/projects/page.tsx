@@ -1,5 +1,5 @@
-import { prisma } from '../../server/db';
-import InnerProjectsList from '../components/inner-projects-list';
+import { prisma } from '../../utils/db';
+import InnerProjectsList from '../../components/inner-projects-list';
 
 export const metadata = {
   title: 'Projects',

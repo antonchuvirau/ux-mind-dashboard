@@ -1,7 +1,7 @@
-"use client";
+'use client';
 import Button from './button';
 import Input from './input';
-import useZodForm from '../../hooks/use-zod-form';
+import { useZodForm } from '../../hooks/use-zod-form';
 import { z } from 'zod';
 import { addProject, editProject } from '../../actions/actions';
 import { useRouter } from 'next/navigation';
@@ -13,9 +13,7 @@ interface Props {
 
 export const schema = z.object({
   id: z.string().optional(),
-  name: z
-    .string()
-    .nonempty("Please enter project name"),
+  name: z.string().nonempty('Please enter project name'),
   upworkId: z.string().nullable(),
   hubstaffId: z.string().nullable(),
   asanaId: z.string().nullable(),
@@ -43,22 +41,22 @@ export default function ProjectForm({ defaultValues }: Props) {
       const modifiedData = {
         ...data,
         id: defaultValues?.id,
-      }
+      };
       editProject(modifiedData)
-      .catch(err => console.error('project edit error'))
-      .then(() => console.log('successfully edited'))
-      . catch(() => console.log('promise catched'));
-    } else{
+        .catch((err) => console.error('project edit error'))
+        .then(() => console.log('successfully edited'))
+        .catch(() => console.log('promise catched'));
+    } else {
       addProject(data)
-      .catch(err => console.error('project add error'))
-      .then(() => console.log('successfully added'))
-      .catch(() => console.log('promise catched'));
+        .catch((err) => console.error('project add error'))
+        .then(() => console.log('successfully added'))
+        .catch(() => console.log('promise catched'));
     }
     router.push('/projects');
   });
 
   return (
-    <form onSubmit={onSubmit} className="flex flex-col paper">
+    <form onSubmit={onSubmit} className="paper flex flex-col">
       <Input
         placeholder="Full Name"
         name="name"
@@ -84,9 +82,7 @@ export default function ProjectForm({ defaultValues }: Props) {
         errors={errors}
       />
       <Button type="submit" disabled={!isValid || !isDirty || isSubmitting}>
-        {defaultValues
-        ? "Edit project"
-        : "Add project"}
+        {defaultValues ? 'Edit project' : 'Add project'}
       </Button>
     </form>
   );

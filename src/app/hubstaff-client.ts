@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { prisma } from '@/server/db';
+import { prisma } from '@/utils/db';
 import jwtDecode from 'jwt-decode';
 import { z } from 'zod';
 import _ from 'lodash';

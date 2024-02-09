@@ -1,6 +1,6 @@
-import { prisma } from '../../../../server/db';
+import { prisma } from '../../../../utils/db';
 import { cache } from 'react';
-import ProjectForm from '../../../components/ui/project-form';
+import ProjectForm from '../../../../components/ui/project-form';
 
 interface Props {
   params: {

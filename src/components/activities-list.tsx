@@ -2,8 +2,8 @@
 
 import { createColumnHelper } from '@tanstack/react-table';
 import Table from './ui/table';
-import { type HubstaffActivity } from '../hubstaff-validators';
-import { type HubstaffUser } from '../hubstaff-validators';
+import { type HubstaffActivity } from '../app/hubstaff-validators';
+import { type HubstaffUser } from '../app/hubstaff-validators';
 import _ from 'lodash';
 
 interface Props {

@@ -1,11 +1,11 @@
 import HubstaffClient from '@/app/hubstaff-client';
-import ActivitiesList from '../../components/activities-list';
+import ActivitiesList from '../../../components/activities-list';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid';
 import { type Metadata } from 'next';
-import TrackedRange from '../../components/tracked-range';
+import TrackedRange from '../../../components/tracked-range';
 import Link from 'next/link';
 import { cache } from 'react';
-import { prisma } from '../../../server/db';
+import { prisma } from '../../../utils/db';
 
 const getProject = cache((id: string) => {
   return prisma.project.findFirstOrThrow({

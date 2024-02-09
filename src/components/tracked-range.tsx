@@ -1,6 +1,6 @@
 'use client';
 
-import { type HubstaffActivity } from '../hubstaff-validators';
+import { type HubstaffActivity } from '../app/hubstaff-validators';
 import DateRangePicker from './ui/date-range-picker';
 import { useZodForm } from './../hooks/use-zod-form';
 import { z } from 'zod';
