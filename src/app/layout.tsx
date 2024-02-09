@@ -11,6 +11,9 @@ export const metadata = {
     template: '%s | UXMind Business',
   },
   description: 'Admin UI for UXMind business',
+  icons: {
+    icon: '/favicon.ico',
+  },
 };
 
 export default function RootLayout({

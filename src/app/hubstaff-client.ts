@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { prisma } from '@/utils/db';
-import jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { z } from 'zod';
 import _ from 'lodash';
 import { type HubstaffAccess } from '@prisma/client';
@@ -71,7 +70,7 @@ class HubstaffClient {
     if (!this.access.accessToken) {
       // We assume only one hubstaffAccess will ever exist in DB. Maybe in future we will have more?
       this.access = await prisma.hubstaffAccess.findFirstOrThrow().catch(() => {
-        console.log('HubstaffAccess does not exist in DB, creating new one');
+        // console.log('HubstaffAccess does not exist in DB, creating new one');
         return prisma.hubstaffAccess.create({
           data: {
             accessToken: process.env.ACCESS_TOKEN || '',
@@ -213,7 +212,7 @@ class HubstaffClient {
       'time_slot[stop]': stopTime.toISOString(),
     });
 
-    console.log('Fetching dates ', startTime, stopTime, pageId);
+    // console.log('Fetching dates ', startTime, stopTime, pageId);
     const res = projectID
       ? await this.request(
           `/projects/${projectID}/activities?${params.toString()}`,

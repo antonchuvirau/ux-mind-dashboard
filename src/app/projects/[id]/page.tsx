@@ -35,7 +35,7 @@ export default async function SingleProject({ params, searchParams }: Props) {
       return null;
     });
 
-  console.log({ project, hubstaffProject });
+  // console.log({ project, hubstaffProject });
 
   const activities = await client.getActivities(
     searchParams.startDate
