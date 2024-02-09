@@ -1,8 +1,8 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useTransition } from 'react';
+import { useAction } from 'next-safe-action/hooks';
 import { z } from 'zod';
-import { type Project } from '@prisma/client';
 
 import Button from '@/components/ui/button';
 import Input from '@/components/ui/input';
@@ -11,11 +11,13 @@ import { useZodForm } from '@/hooks/use-zod-form';
 
 import { addProject, editProject } from '@/app/projects/actions';
 
+import { type Project } from '@prisma/client';
+
 interface Props {
   defaultValues?: Project;
 }
 
-export const schema = z.object({
+const schema = z.object({
   id: z.string().optional(),
   name: z.string().min(1, { message: 'Please enter project name' }),
   upworkId: z.string().nullable(),
@@ -23,44 +25,66 @@ export const schema = z.object({
   asanaId: z.string().nullable(),
 });
 
-export default function ProjectForm({ defaultValues }: Props) {
+export default function AddProjectForm({ defaultValues }: Props) {
+  const [isPending, startTransition] = useTransition();
+
+  const { execute: executeAdd, status: addStatus } = useAction(addProject, {
+    onSuccess: (data) => {
+      if (data && 'failure' in data) {
+        console.log(data.failure);
+        return;
+      }
+
+      console.log('Project was successfully added'); // fix: won't be printed
+    },
+  });
+
+  const { execute: executeEdit, status: editStatus } = useAction(editProject, {
+    onSuccess: (data) => {
+      if (data && 'failure' in data) {
+        console.log(data.failure);
+        return;
+      }
+
+      console.log('Project was successfully edited'); // fix: won't be printed
+    },
+  });
+
   const {
     register,
     handleSubmit,
     formState: { errors, isValid, isSubmitting, isDirty },
   } = useZodForm({
     schema,
+    mode: 'onBlur',
     defaultValues: defaultValues || {
       name: '',
       upworkId: '',
       hubstaffId: '',
       asanaId: '',
     },
-    mode: 'onBlur',
-  });
-  const router = useRouter();
-
-  const onSubmit = handleSubmit((data) => {
-    if (defaultValues) {
-      const modifiedData = {
-        ...data,
-        id: defaultValues?.id,
-      };
-      editProject(modifiedData)
-        .catch(() => console.error('project edit error'))
-        .then(() => console.log('successfully edited'))
-        .catch(() => console.log('promise catched'));
-    } else {
-      addProject(data)
-        .catch(() => console.error('project add error'))
-        .then(() => console.log('successfully added'))
-        .catch(() => console.log('promise catched'));
-    }
-    router.push('/projects');
   });
 
   return (
-    <form onSubmit={onSubmit} className="paper flex flex-col">
+    <form
+      className="flex flex-col"
+      onSubmit={handleSubmit((data) => {
+        if (defaultValues) {
+          const modifiedData = {
+            ...data,
+            id: defaultValues?.id,
+          };
+
+          startTransition(() => {
+            executeEdit(modifiedData);
+          });
+        } else {
+          startTransition(() => {
+            executeAdd(data);
+          });
+        }
+      })}
+    >
       <Input
         placeholder="Full Name"
         name="name"
@@ -85,8 +109,23 @@ export default function ProjectForm({ defaultValues }: Props) {
         register={register}
         errors={errors}
       />
-      <Button type="submit" disabled={!isValid || !isDirty || isSubmitting}>
-        {defaultValues ? 'Edit project' : 'Add project'}
+      <Button
+        type="submit"
+        disabled={
+          !isValid ||
+          !isDirty ||
+          isSubmitting ||
+          addStatus === 'executing' ||
+          isPending
+        }
+      >
+        {defaultValues
+          ? editStatus === 'executing' || isPending
+            ? 'Loading...'
+            : 'Edit project'
+          : addStatus === 'executing' || isPending
+            ? 'Loading...'
+            : 'Add project'}
       </Button>
     </form>
   );
