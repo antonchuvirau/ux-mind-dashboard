@@ -5,7 +5,7 @@ import { type z } from 'zod';
 function useZodForm<TSchema extends z.ZodType>(
   props: Omit<UseFormProps<TSchema['_input']>, 'resolver'> & {
     schema: TSchema;
-  }
+  },
 ) {
   const form = useForm<TSchema['_input']>({
     ...props,

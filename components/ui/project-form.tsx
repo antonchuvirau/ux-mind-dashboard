@@ -43,12 +43,12 @@ export default function ProjectForm({ defaultValues }: Props) {
         id: defaultValues?.id,
       };
       editProject(modifiedData)
-        .catch((err) => console.error('project edit error'))
+        .catch(() => console.error('project edit error'))
         .then(() => console.log('successfully edited'))
         .catch(() => console.log('promise catched'));
     } else {
       addProject(data)
-        .catch((err) => console.error('project add error'))
+        .catch(() => console.error('project add error'))
         .then(() => console.log('successfully added'))
         .catch(() => console.log('promise catched'));
     }

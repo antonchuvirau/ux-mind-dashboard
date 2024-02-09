@@ -21,7 +21,7 @@ export default async function Home({
     searchParams.startDate
       ? new Date(String(searchParams.startDate))
       : new Date(),
-    searchParams.endDate ? new Date(String(searchParams.endDate)) : new Date()
+    searchParams.endDate ? new Date(String(searchParams.endDate)) : new Date(),
   );
 
   return (

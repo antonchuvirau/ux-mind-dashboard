@@ -18,7 +18,7 @@ const ActivitiesList = ({ activities, members }: Props) => {
       user_id,
       name: members.find((member) => member.id === Number(user_id))?.name,
       tracked: _.sumBy(activities, 'tracked'),
-    })
+    }),
   );
 
   const columnHelper = createColumnHelper<(typeof data)[0]>();

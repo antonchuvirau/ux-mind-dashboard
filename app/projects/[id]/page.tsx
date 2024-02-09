@@ -1,4 +1,4 @@
-import HubstaffClient from '@/app/hubstaff-client';
+import HubstaffClient from '../../hubstaff-client';
 import ActivitiesList from '../../../components/activities-list';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid';
 import { type Metadata } from 'next';

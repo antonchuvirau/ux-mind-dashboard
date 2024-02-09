@@ -32,14 +32,14 @@ const TrackedRange = ({ activities }: Props) => {
             startDate: formState.start.toISOString(),
             // Add an extra day because range should include the last day
             endDate: addDays(formState.end, 1).toISOString(),
-          }).toString()
+          }).toString(),
       );
     }
   }, [formState, router]);
 
   const trackedTime = activities.reduce(
     (sum, activity) => (activity.tracked ? sum + activity.tracked : sum),
-    0
+    0,
   );
 
   return (

@@ -1,4 +1,4 @@
-import { prisma } from '@/utils/db';
+import { prisma } from '../utils/db';
 import { jwtDecode } from 'jwt-decode';
 import { z } from 'zod';
 import _ from 'lodash';
@@ -41,7 +41,7 @@ class HubstaffClient {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
-      }
+      },
     );
 
     const access = z
@@ -86,7 +86,7 @@ class HubstaffClient {
 
   async request(
     endpoint: string,
-    options: Parameters<typeof fetch>[1] = {} // This type is needed to be able to pass custom cache & revalidate options
+    options: Parameters<typeof fetch>[1] = {}, // This type is needed to be able to pass custom cache & revalidate options
   ) {
     await this.maybeRefreshToken();
     if (!this.access.accessToken)
@@ -130,7 +130,7 @@ class HubstaffClient {
     });
     const res = await this.request(
       `/organizations/${ORG_ID}/projects?${params.toString()}`,
-      { next: { revalidate: 3600 } }
+      { next: { revalidate: 3600 } },
     );
 
     const { projects, pagination } = z
@@ -163,7 +163,7 @@ class HubstaffClient {
     const params = new URLSearchParams({ page_limit: PAGE_LIMIT.toString() });
     const res = await this.request(
       `/organizations/${ORG_ID}/members?${params.toString()}`,
-      { next: { revalidate: 3600 } }
+      { next: { revalidate: 3600 } },
     );
     const { members } = z
       .object({
@@ -178,7 +178,7 @@ class HubstaffClient {
     startTime: Date,
     stopTime: Date,
     pageId?: number,
-    projectID?: number
+    projectID?: number,
   ): Promise<HubstaffActivity[]> {
     // Hubstaff doesn't allow to fetch more than 1 week in 1 request.
     if (differenceInDays(stopTime, startTime) > 7) {
@@ -188,7 +188,7 @@ class HubstaffClient {
         ..._.range(
           startTime.getTime(),
           stopTime.getTime(),
-          1000 * 60 * 60 * 24 * 7 // 1 week in milliseconds
+          1000 * 60 * 60 * 24 * 7, // 1 week in milliseconds
         ).map((ms) => new Date(ms)),
         stopTime, // End of the range was not included
       ];
@@ -199,7 +199,7 @@ class HubstaffClient {
           if (!interval[0] || !interval[1])
             throw new Error(`Wrong interval: ${JSON.stringify(interval)}`);
           return this.getActivities(interval[0], interval[1]);
-        })
+        }),
       );
 
       return _.flatten(results);
@@ -216,11 +216,11 @@ class HubstaffClient {
     const res = projectID
       ? await this.request(
           `/projects/${projectID}/activities?${params.toString()}`,
-          { next: { revalidate: 3600 } }
+          { next: { revalidate: 3600 } },
         )
       : await this.request(
           `/organizations/${ORG_ID}/activities?${params.toString()}`,
-          { next: { revalidate: 3600 } }
+          { next: { revalidate: 3600 } },
         );
 
     const { activities, pagination } = z
@@ -236,12 +236,12 @@ class HubstaffClient {
             startTime,
             stopTime,
             pagination.next_page_start_id,
-            projectID
+            projectID,
           )
         : await this.getActivities(
             startTime,
             stopTime,
-            pagination.next_page_start_id
+            pagination.next_page_start_id,
           )
       : [];
 

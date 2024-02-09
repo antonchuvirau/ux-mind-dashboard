@@ -72,7 +72,7 @@ function Table<T>({
                     ? null
                     : flexRender(
                         header.column.columnDef.header,
-                        header.getContext()
+                        header.getContext(),
                       )}
                 </th>
               ))}
@@ -122,14 +122,14 @@ function Table<T>({
               table.getState().pagination.pageIndex -
                 Math.floor(paginationRange / 2),
               0,
-              table.getPageCount()
+              table.getPageCount(),
             ),
             _.clamp(
               table.getState().pagination.pageIndex -
                 Math.floor(paginationRange / 2),
               0,
-              table.getPageCount()
-            ) + paginationRange
+              table.getPageCount(),
+            ) + paginationRange,
           )
           .map((pageIndex) => (
             <div
