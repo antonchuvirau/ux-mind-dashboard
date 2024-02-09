@@ -51,15 +51,15 @@ function Table<T>({
   }, [table, limit]);
 
   return (
-    <div className='max-w-full overflow-x-auto'>
-      <table className='w-full whitespace-nowrap text-sm'>
+    <div className="max-w-full overflow-x-auto">
+      <table className="w-full whitespace-nowrap text-sm">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
                 <th
                   key={header.id}
-                  className='text-secondary overflow-hidden text-ellipsis px-2 py-2'
+                  className="text-secondary overflow-hidden text-ellipsis px-2 py-2"
                   {...{
                     style: {
                       maxWidth: header.column.columnDef.maxSize || undefined,
@@ -99,7 +99,7 @@ function Table<T>({
                         width: cell.column.columnDef.size || undefined,
                       },
                     }}
-                    className='overflow-hidden text-ellipsis whitespace-nowrap py-3 pl-2 pr-6'
+                    className="overflow-hidden text-ellipsis whitespace-nowrap py-3 pl-2 pr-6"
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
@@ -108,9 +108,9 @@ function Table<T>({
             ))}
         </tbody>
       </table>
-      <div className='text-secondary mt-2 flex w-full justify-center'>
+      <div className="text-secondary mt-2 flex w-full justify-center">
         <button
-          className='cursor-pointer px-2 disabled:cursor-not-allowed disabled:text-gray-300'
+          className="cursor-pointer px-2 disabled:cursor-not-allowed disabled:text-gray-300"
           disabled={!table.getCanPreviousPage()}
           onClick={table.previousPage}
         >
@@ -145,7 +145,7 @@ function Table<T>({
             </div>
           ))}
         <button
-          className='cursor-pointer px-2 disabled:cursor-not-allowed disabled:text-gray-300'
+          className="cursor-pointer px-2 disabled:cursor-not-allowed disabled:text-gray-300"
           disabled={!table.getCanNextPage()}
           onClick={table.nextPage}
         >

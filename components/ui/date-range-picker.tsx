@@ -36,7 +36,7 @@ type Props<T extends FieldValues> = Omit<UseControllerProps<T>, 'name'> &
 
 function CustomHeader(props: ReactDatePickerCustomHeaderProps) {
   return (
-    <div className='flex justify-between px-2'>
+    <div className="flex justify-between px-2">
       <button
         onClick={(event) => {
           event.preventDefault();
@@ -44,8 +44,8 @@ function CustomHeader(props: ReactDatePickerCustomHeaderProps) {
           props.decreaseMonth();
         }}
         disabled={props.prevMonthButtonDisabled}
-        className='text-xl disabled:cursor-not-allowed'
-        title='Previous month'
+        className="text-xl disabled:cursor-not-allowed"
+        title="Previous month"
       >
         {'<'}
       </button>
@@ -57,8 +57,8 @@ function CustomHeader(props: ReactDatePickerCustomHeaderProps) {
           props.increaseMonth();
         }}
         disabled={props.nextMonthButtonDisabled}
-        className='text-xl disabled:cursor-not-allowed'
-        title='Next month'
+        className="text-xl disabled:cursor-not-allowed"
+        title="Next month"
       >
         {'>'}
       </button>
@@ -77,7 +77,7 @@ function DateRangePicker<T extends FieldValues>({
   const endController = useController({ control, name: endName });
 
   return (
-    <div className='flex flex-col'>
+    <div className="flex flex-col">
       <Label name={label} required={rest.required} />
       <ReactDatePicker
         selected={startController.field.value as Date}

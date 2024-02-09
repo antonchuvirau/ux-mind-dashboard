@@ -60,32 +60,32 @@ export default function ProjectForm({ defaultValues }: Props) {
   });
 
   return (
-    <form onSubmit={onSubmit} className='paper flex flex-col'>
+    <form onSubmit={onSubmit} className="paper flex flex-col">
       <Input
-        placeholder='Full Name'
-        name='name'
+        placeholder="Full Name"
+        name="name"
         register={register}
         errors={errors}
       />
       <Input
-        placeholder='Upwork id'
-        name='upworkId'
+        placeholder="Upwork id"
+        name="upworkId"
         register={register}
         errors={errors}
       />
       <Input
-        placeholder='Hubstaff id'
-        name='hubstaffId'
+        placeholder="Hubstaff id"
+        name="hubstaffId"
         register={register}
         errors={errors}
       />
       <Input
-        placeholder='Asana id'
-        name='asanaId'
+        placeholder="Asana id"
+        name="asanaId"
         register={register}
         errors={errors}
       />
-      <Button type='submit' disabled={!isValid || !isDirty || isSubmitting}>
+      <Button type="submit" disabled={!isValid || !isDirty || isSubmitting}>
         {defaultValues ? 'Edit project' : 'Add project'}
       </Button>
     </form>

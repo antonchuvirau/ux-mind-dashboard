@@ -49,7 +49,7 @@ export default function Input<T extends FieldValues>({
         {...rest}
       />
       {error?.message && (
-        <p className='mx-1 text-sm text-red-500'>{error.message}</p>
+        <p className="mx-1 text-sm text-red-500">{error.message}</p>
       )}
     </fieldset>
   );
