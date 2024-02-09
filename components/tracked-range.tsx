@@ -27,6 +27,7 @@ const TrackedRange = ({ activities }: Props) => {
   });
 
   const formState = watch();
+
   useEffect(() => {
     if (formState.end) {
       router.push(
@@ -46,7 +47,7 @@ const TrackedRange = ({ activities }: Props) => {
   );
 
   return (
-    <div>
+    <>
       <div className='text-primary mb-2 mt-0 text-2xl leading-tight'>
         Hours: {Math.trunc(trackedTime / 3600)}
       </div>
@@ -60,7 +61,7 @@ const TrackedRange = ({ activities }: Props) => {
         control={control}
         required
       />
-    </div>
+    </>
   );
 };
 

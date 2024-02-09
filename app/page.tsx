@@ -12,12 +12,15 @@ export default async function Home({
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const client = new HubstaffClient();
+
   const members = await client.getOrganizationMembers();
   const projects = await client.getProjects();
+
   /*const activities = await client.getActivities(
     new Date('2023-07-01'),
     new Date('2023-07-08')
   );*/
+
   const activities = await client.getActivities(
     searchParams.startDate
       ? new Date(String(searchParams.startDate))
