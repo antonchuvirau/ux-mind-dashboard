@@ -37,8 +37,8 @@ export default function Input<T extends FieldValues>({
       <input
         id={name}
         className={`
-          w-full rounded-lg focus:ring-2 focus:ring-secondary disabled:cursor-not-allowed
-          bg-[#F9FBFD] border-[#005F730D] border-[1px] text-gray-500 disabled:text-gray-400 placeholder:text-gray-400 p-5 ${inputClassName}
+          focus:ring-secondary w-full rounded-lg border-[1px] border-[#005F730D]
+          bg-[#F9FBFD] p-5 text-gray-500 placeholder:text-gray-400 focus:ring-2 disabled:cursor-not-allowed disabled:text-gray-400 ${inputClassName}
         `}
         type={rest.type}
         {...register(name, {
@@ -48,7 +48,7 @@ export default function Input<T extends FieldValues>({
         {...rest}
       />
       {error?.message && (
-        <p className="text-red-500 text-sm mx-1">{error.message}</p>
+        <p className='mx-1 text-sm text-red-500'>{error.message}</p>
       )}
     </fieldset>
   );

@@ -24,8 +24,8 @@ const MembersList = ({ members }: Props) => {
   ];
 
   return (
-    <div className="mt-5">
-      <div className="text-primary mb-2 mt-0 text-5xl font-medium leading-tight">
+    <div className='mt-5'>
+      <div className='text-primary mb-2 mt-0 text-5xl font-medium leading-tight'>
         Hubstaff Members
       </div>
       <Table data={members} columns={columns} />

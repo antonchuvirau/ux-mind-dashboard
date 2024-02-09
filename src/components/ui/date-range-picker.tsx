@@ -42,12 +42,12 @@ function CustomHeader(props: ReactDatePickerCustomHeaderProps) {
   };
 
   return (
-    <div className="flex justify-between px-2">
+    <div className='flex justify-between px-2'>
       <button
         onClick={handleDecrease}
         disabled={props.prevMonthButtonDisabled}
-        className="text-xl disabled:cursor-not-allowed"
-        title="Previous month"
+        className='text-xl disabled:cursor-not-allowed'
+        title='Previous month'
       >
         {'<'}
       </button>
@@ -55,8 +55,8 @@ function CustomHeader(props: ReactDatePickerCustomHeaderProps) {
       <button
         onClick={handleIncrease}
         disabled={props.nextMonthButtonDisabled}
-        className="text-xl disabled:cursor-not-allowed"
-        title="Next month"
+        className='text-xl disabled:cursor-not-allowed'
+        title='Next month'
       >
         {'>'}
       </button>
@@ -83,7 +83,7 @@ function DateRangePicker<T extends FieldValues>({
   };
 
   return (
-    <div className="flex flex-col">
+    <div className='flex flex-col'>
       <Label name={label} required={rest.required} />
       <ReactDatePicker
         {...rest}

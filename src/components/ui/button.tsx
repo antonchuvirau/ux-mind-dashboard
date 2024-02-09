@@ -17,7 +17,7 @@ export default function Button({
 }: Props) {
   return (
     <button
-      type="submit"
+      type='submit'
       className={`
         text-md relative flex w-full items-center
         justify-center whitespace-nowrap rounded-full bg-black
@@ -35,7 +35,7 @@ export default function Button({
     >
       {children}
       {isLoading && (
-        <Spinner className="absolute bottom-0 right-2 top-0 aspect-square h-full w-6" />
+        <Spinner className='absolute bottom-0 right-2 top-0 aspect-square h-full w-6' />
       )}
     </button>
   );
