@@ -13,7 +13,7 @@ import {
 } from '@/hubstaff/validators';
 import { differenceInDays } from 'date-fns';
 
-import { prisma } from '@/utils/db';
+import { prisma } from '@/lib/db';
 
 const BASE_URL = 'https://api.hubstaff.com/v2';
 const ORG_ID = process.env.ORGANIZATION_ID || '';

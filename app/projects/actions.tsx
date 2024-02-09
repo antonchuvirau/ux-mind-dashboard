@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { type z } from 'zod';
 
 import { type schema } from '@/components/ui/project-form';
-import { prisma } from '@/utils/db';
+import { prisma } from '@/lib/db';
 
 type Project = z.infer<typeof schema>;
 

@@ -8,7 +8,7 @@ import HubstaffClient from '@/hubstaff/client';
 import TrackedRange from '@/components/tracked-range';
 import ActivitiesList from '@/components/activities-list';
 
-import { prisma } from '@/utils/db';
+import { prisma } from '@/lib/db';
 
 const getProject = cache((id: string) => {
   return prisma.project.findFirstOrThrow({

@@ -1,6 +1,6 @@
 import { cache } from 'react';
 
-import { prisma } from '@/utils/db';
+import { prisma } from '@/lib/db';
 
 import ProjectForm from '@/components/ui/project-form';
 
