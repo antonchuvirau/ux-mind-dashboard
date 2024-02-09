@@ -1,6 +1,6 @@
 import { type ButtonHTMLAttributes } from 'react';
 
-import Spinner from './spinner';
+import Spinner from '@/components/ui/spinner';
 
 type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
   isLoading?: boolean;

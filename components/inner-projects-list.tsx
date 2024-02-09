@@ -1,9 +1,10 @@
 'use client';
 
-import { createColumnHelper } from '@tanstack/react-table';
-import Table from './ui/table';
-import { type Project } from '@prisma/client';
 import { useRouter } from 'next/navigation';
+import { createColumnHelper } from '@tanstack/react-table';
+import { type Project } from '@prisma/client';
+
+import Table from '@/components/ui/table';
 
 interface Props {
   projects: Project[];

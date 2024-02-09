@@ -1,11 +1,14 @@
-import HubstaffClient from '../../hubstaff-client';
-import ActivitiesList from '../../../components/activities-list';
-import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid';
-import { type Metadata } from 'next';
-import TrackedRange from '../../../components/tracked-range';
 import Link from 'next/link';
 import { cache } from 'react';
-import { prisma } from '../../../utils/db';
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid';
+import { type Metadata } from 'next';
+
+import HubstaffClient from '@/hubstaff/client';
+
+import TrackedRange from '@/components/tracked-range';
+import ActivitiesList from '@/components/activities-list';
+
+import { prisma } from '@/utils/db';
 
 const getProject = cache((id: string) => {
   return prisma.project.findFirstOrThrow({
@@ -22,6 +25,7 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const project = await getProject(params.id);
+
   return { title: project.name };
 }
 
@@ -43,7 +47,7 @@ export default async function SingleProject({ params, searchParams }: Props) {
       : new Date(),
     searchParams.endDate ? new Date(String(searchParams.endDate)) : new Date(),
     undefined,
-    Number(project.hubstaffId)
+    Number(project.hubstaffId),
   );
 
   const members = await client.getOrganizationMembers();

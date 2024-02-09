@@ -1,5 +1,5 @@
-import { type FC } from 'react';
 import _ from 'lodash';
+
 import Spinner from './spinner';
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
   isLoading?: boolean;
 }
 
-const Label: FC<Props> = ({ name, isLoading = false, required = false }) => {
+const Label = ({ name, isLoading = false, required = false }: Props) => {
   return (
     <label
       className='text-secondary my-1 flex justify-between gap-1'

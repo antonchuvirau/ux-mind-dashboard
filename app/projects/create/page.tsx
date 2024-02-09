@@ -1,4 +1,4 @@
-import ProjectForm from '../../../components/ui/project-form';
+import ProjectForm from '@/components/ui/project-form';
 
 export const metadata = {
   title: 'Create project',

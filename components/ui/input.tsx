@@ -1,13 +1,14 @@
 import _ from 'lodash';
 import { type InputHTMLAttributes } from 'react';
-import {
-  type FieldError,
-  type FieldErrors,
-  type FieldValues,
-  type Path,
-  type UseFormRegister,
+import type {
+  FieldError,
+  FieldErrors,
+  FieldValues,
+  Path,
+  UseFormRegister,
 } from 'react-hook-form';
-import Label from './label';
+
+import Label from '@/components/ui/label';
 
 type Props<T extends FieldValues> = InputHTMLAttributes<HTMLInputElement> & {
   name: Path<T>;

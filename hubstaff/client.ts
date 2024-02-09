@@ -1,4 +1,3 @@
-import { prisma } from '../utils/db';
 import { jwtDecode } from 'jwt-decode';
 import { z } from 'zod';
 import _ from 'lodash';
@@ -11,8 +10,10 @@ import {
   paginationSchema,
   projectSchema,
   userSchema,
-} from './hubstaff-validators';
+} from '@/hubstaff/validators';
 import { differenceInDays } from 'date-fns';
+
+import { prisma } from '@/utils/db';
 
 const BASE_URL = 'https://api.hubstaff.com/v2';
 const ORG_ID = process.env.ORGANIZATION_ID || '';
@@ -29,10 +30,12 @@ class HubstaffClient {
 
   async refreshToken() {
     if (!this.access.refreshToken) throw new Error('Refresh token is missing!');
+
     const params = new URLSearchParams({
       grant_type: 'refresh_token',
       refresh_token: this.access.refreshToken,
     });
+
     const res = await fetch(
       `https://account.hubstaff.com/access_tokens?${params.toString()}`,
       {
@@ -89,6 +92,7 @@ class HubstaffClient {
     options: Parameters<typeof fetch>[1] = {}, // This type is needed to be able to pass custom cache & revalidate options
   ) {
     await this.maybeRefreshToken();
+
     if (!this.access.accessToken)
       throw new Error('accessToken missing - something is wrong');
 
@@ -101,6 +105,7 @@ class HubstaffClient {
         Authorization: `Bearer ${this.access.accessToken || ''}`,
       },
     });
+
     return res.json();
   }
 
@@ -115,11 +120,13 @@ class HubstaffClient {
     const res = await this.get(`projects/${id}`, {
       next: { revalidate: 60 },
     });
+
     const { project } = z
       .object({
         project: projectSchema,
       })
       .parse(res);
+
     return project;
   }
 
@@ -128,6 +135,7 @@ class HubstaffClient {
       page_limit: PAGE_LIMIT.toString(),
       page_start_id: pageId?.toString() || '',
     });
+
     const res = await this.request(
       `/organizations/${ORG_ID}/projects?${params.toString()}`,
       { next: { revalidate: 3600 } },
@@ -151,6 +159,7 @@ class HubstaffClient {
     const res = await this.get(`users/${id}`, {
       next: { revalidate: 3600 },
     });
+
     const { user } = z
       .object({
         user: userSchema,
@@ -161,15 +170,18 @@ class HubstaffClient {
 
   async getOrganizationMembers() {
     const params = new URLSearchParams({ page_limit: PAGE_LIMIT.toString() });
+
     const res = await this.request(
       `/organizations/${ORG_ID}/members?${params.toString()}`,
       { next: { revalidate: 3600 } },
     );
+
     const { members } = z
       .object({
         members: z.object({ user_id: z.number() }).array(),
       })
       .parse(res);
+
     return Promise.all(members.map((member) => this.getUser(member.user_id)));
   }
 
@@ -192,6 +204,7 @@ class HubstaffClient {
         ).map((ms) => new Date(ms)),
         stopTime, // End of the range was not included
       ];
+
       const intervals = _.zip(points, points.slice(1)).slice(0, -1);
 
       const results = await Promise.all(

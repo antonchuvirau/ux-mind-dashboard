@@ -1,11 +1,15 @@
 'use client';
-import Button from './button';
-import Input from './input';
-import { useZodForm } from '../../hooks/use-zod-form';
-import { z } from 'zod';
-import { addProject, editProject } from '../../actions/actions';
+
 import { useRouter } from 'next/navigation';
+import { z } from 'zod';
 import { type Project } from '@prisma/client';
+
+import Button from '@/components/ui/button';
+import Input from '@/components/ui/input';
+
+import { useZodForm } from '@/hooks/use-zod-form';
+
+import { addProject, editProject } from '@/actions/actions';
 
 interface Props {
   defaultValues?: Project;
@@ -13,7 +17,7 @@ interface Props {
 
 export const schema = z.object({
   id: z.string().optional(),
-  name: z.string().nonempty('Please enter project name'),
+  name: z.string().min(1, { message: 'Please enter project name' }),
   upworkId: z.string().nullable(),
   hubstaffId: z.string().nullable(),
   asanaId: z.string().nullable(),
