@@ -1,8 +1,11 @@
 import { jwtDecode } from 'jwt-decode';
 import { z } from 'zod';
 import _ from 'lodash';
-import { type HubstaffAccess } from '@prisma/client';
 import { URLSearchParams } from 'url';
+import { differenceInDays } from 'date-fns';
+
+import { type HubstaffAccess } from '@prisma/client';
+
 import {
   type HubstaffActivity,
   type HubstaffProject,
@@ -11,16 +14,16 @@ import {
   projectSchema,
   userSchema,
 } from '@/hubstaff/validators';
-import { differenceInDays } from 'date-fns';
 
 import { prisma } from '@/lib/db';
 
 const BASE_URL = 'https://api.hubstaff.com/v2';
+
 const ORG_ID = process.env.ORGANIZATION_ID || '';
 const PAGE_LIMIT = 500;
 
-class HubstaffClient {
-  access: Partial<HubstaffAccess>;
+export default class HubstaffClient {
+  private access: Partial<HubstaffAccess>;
 
   constructor() {
     this.access = {
@@ -28,7 +31,7 @@ class HubstaffClient {
     };
   }
 
-  async refreshToken() {
+  private async refreshToken() {
     if (!this.access.refreshToken) throw new Error('Refresh token is missing!');
 
     const params = new URLSearchParams({
@@ -68,7 +71,7 @@ class HubstaffClient {
     });
   }
 
-  async maybeRefreshToken() {
+  private async maybeRefreshToken() {
     // Get token from database if needed
     if (!this.access.accessToken) {
       // We assume only one hubstaffAccess will ever exist in DB. Maybe in future we will have more?
@@ -82,12 +85,13 @@ class HubstaffClient {
         });
       });
     }
+
     if ((this.access.exp || 0) < Date.now() / 1000) {
       await this.refreshToken();
     }
   }
 
-  async request(
+  private async request(
     endpoint: string,
     options: Parameters<typeof fetch>[1] = {}, // This type is needed to be able to pass custom cache & revalidate options
   ) {
@@ -97,58 +101,58 @@ class HubstaffClient {
       throw new Error('accessToken missing - something is wrong');
 
     const res = await fetch(`${BASE_URL}/${_.trimStart(endpoint, '/')}`, {
-      ...options,
-      ...(options.body && { ...{ body: JSON.stringify(options.body) } }),
       headers: {
-        Accept: 'application/json',
         'Content-Type': 'application/json',
+        Accept: 'application/json',
         Authorization: `Bearer ${this.access.accessToken || ''}`,
       },
+      ...(options.body && { ...{ body: JSON.stringify(options.body) } }),
+      ...options,
     });
 
     return res.json();
   }
 
-  async get(endpoint: string, options: Parameters<typeof fetch>[1]) {
+  private async get(endpoint: string, options: Parameters<typeof fetch>[1]) {
     return this.request(endpoint, {
       method: 'GET',
       ...options,
     });
   }
 
+  // https://developer.hubstaff.com/docs/hubstaff_v2#!/projects/getV2ProjectsProjectId
   async getProject(id: number) {
-    // eslint-disable-next-line
-    const res = await this.get(`projects/${id}`, {
-      next: { revalidate: 60 },
-    });
-
     const { project } = z
       .object({
         project: projectSchema,
       })
-      .parse(res);
+      .parse(
+        await this.get(`projects/${id}`, {
+          next: { revalidate: 60 },
+        }),
+      );
 
     return project;
   }
 
+  // https://developer.hubstaff.com/docs/hubstaff_v2#!/projects/getV2OrganizationsOrganizationIdProjects
   async getProjects(pageId?: number): Promise<HubstaffProject[]> {
     const params = new URLSearchParams({
       page_limit: PAGE_LIMIT.toString(),
       page_start_id: pageId?.toString() || '',
     });
 
-    // eslint-disable-next-line
-    const res = await this.request(
-      `/organizations/${ORG_ID}/projects?${params.toString()}`,
-      { next: { revalidate: 3600 } },
-    );
-
     const { projects, pagination } = z
       .object({
         projects: projectSchema.array(),
         pagination: paginationSchema,
       })
-      .parse(res);
+      .parse(
+        await this.request(
+          `/organizations/${ORG_ID}/projects?${params.toString()}`,
+          { next: { revalidate: 3600 } },
+        ),
+      );
 
     const nextPageProjects = pagination?.next_page_start_id
       ? await this.getProjects(pagination.next_page_start_id)
@@ -157,34 +161,35 @@ class HubstaffClient {
     return [...projects, ...nextPageProjects];
   }
 
+  // https://developer.hubstaff.com/docs/hubstaff_v2#!/users/getV2UsersUserId
   async getUser(id: number) {
-    // eslint-disable-next-line
-    const res = await this.get(`users/${id}`, {
-      next: { revalidate: 3600 },
-    });
-
     const { user } = z
       .object({
         user: userSchema,
       })
-      .parse(res);
+      .parse(
+        await this.get(`users/${id}`, {
+          next: { revalidate: 3600 },
+        }),
+      );
+
     return user;
   }
 
+  // https://developer.hubstaff.com/docs/hubstaff_v2#!/organizations/getV2OrganizationsOrganizationIdMembers
   async getOrganizationMembers() {
     const params = new URLSearchParams({ page_limit: PAGE_LIMIT.toString() });
-
-    // eslint-disable-next-line
-    const res = await this.request(
-      `/organizations/${ORG_ID}/members?${params.toString()}`,
-      { next: { revalidate: 3600 } },
-    );
 
     const { members } = z
       .object({
         members: z.object({ user_id: z.number() }).array(),
       })
-      .parse(res);
+      .parse(
+        await this.request(
+          `/organizations/${ORG_ID}/members?${params.toString()}`,
+          { next: { revalidate: 3600 } },
+        ),
+      );
 
     return Promise.all(members.map((member) => this.getUser(member.user_id)));
   }
@@ -194,7 +199,7 @@ class HubstaffClient {
     startTime: Date,
     stopTime: Date,
     pageId?: number,
-    projectID?: number,
+    hubstaffProjectId?: number,
   ): Promise<HubstaffActivity[]> {
     // Hubstaff doesn't allow to fetch more than 1 week in 1 request.
     if (differenceInDays(stopTime, startTime) > 7) {
@@ -215,6 +220,7 @@ class HubstaffClient {
         intervals.map((interval) => {
           if (!interval[0] || !interval[1])
             throw new Error(`Wrong interval: ${JSON.stringify(interval)}`);
+
           return this.getActivities(interval[0], interval[1]);
         }),
       );
@@ -231,31 +237,32 @@ class HubstaffClient {
 
     // console.log('Fetching dates ', startTime, stopTime, pageId);
 
-    // eslint-disable-next-line
-    const res = projectID
-      ? await this.request(
-          `/projects/${projectID}/activities?${params.toString()}`,
-          { next: { revalidate: 3600 } },
-        )
-      : await this.request(
-          `/organizations/${ORG_ID}/activities?${params.toString()}`,
-          { next: { revalidate: 3600 } },
-        );
-
+    // 1. projects/{proj_id}/activities => https://developer.hubstaff.com/docs/hubstaff_v2#!/activities/getV2ProjectsProjectIdActivities
+    // 2. organizations/{org_id}/activities => https://developer.hubstaff.com/docs/hubstaff_v2#!/activities/getV2OrganizationsOrganizationIdActivities
     const { activities, pagination } = z
       .object({
         activities: activitySchema.array(),
         pagination: paginationSchema,
       })
-      .parse(res);
+      .parse(
+        hubstaffProjectId
+          ? await this.request(
+              `/projects/${hubstaffProjectId}/activities?${params.toString()}`,
+              { next: { revalidate: 3600 } },
+            )
+          : await this.request(
+              `/organizations/${ORG_ID}/activities?${params.toString()}`,
+              { next: { revalidate: 3600 } },
+            ),
+      );
 
     const nextPageActivities = pagination?.next_page_start_id
-      ? projectID
+      ? hubstaffProjectId
         ? await this.getActivities(
             startTime,
             stopTime,
             pagination.next_page_start_id,
-            projectID,
+            hubstaffProjectId,
           )
         : await this.getActivities(
             startTime,
@@ -267,5 +274,3 @@ class HubstaffClient {
     return [...activities, ...nextPageActivities];
   }
 }
-
-export default HubstaffClient;
