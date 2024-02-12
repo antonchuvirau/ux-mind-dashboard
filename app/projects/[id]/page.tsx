@@ -52,7 +52,9 @@ export default async function SingleProject({ params, searchParams }: Props) {
       )
     : null;
 
-  const members = await hubstaffClient.getOrganizationMembers();
+  const members = activities
+    ? await hubstaffClient.getOrganizationMembers()
+    : null;
 
   return (
     <main className="container mx-auto py-10">
@@ -102,9 +104,11 @@ export default async function SingleProject({ params, searchParams }: Props) {
               <section className="my-10">
                 <TrackedRange activities={activities} />
               </section>
-              <section className="my-10">
-                <ActivitiesList activities={activities} members={members} />
-              </section>
+              {members && (
+                <section className="my-10">
+                  <ActivitiesList activities={activities} members={members} />
+                </section>
+              )}
             </>
           )}
         </>
