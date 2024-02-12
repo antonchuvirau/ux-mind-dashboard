@@ -39,14 +39,18 @@ export default async function SingleProject({ params, searchParams }: Props) {
     Number(project.hubstaffId),
   );
 
-  const activities = await hubstaffClient.getActivities(
-    searchParams.startDate
-      ? new Date(String(searchParams.startDate))
-      : new Date(),
-    searchParams.endDate ? new Date(String(searchParams.endDate)) : new Date(),
-    undefined,
-    Number(project.hubstaffId),
-  );
+  const activities = hubstaffProject
+    ? await hubstaffClient.getActivities(
+        searchParams.startDate
+          ? new Date(String(searchParams.startDate))
+          : new Date(),
+        searchParams.endDate
+          ? new Date(String(searchParams.endDate))
+          : new Date(),
+        undefined,
+        Number(project.hubstaffId),
+      )
+    : null;
 
   const members = await hubstaffClient.getOrganizationMembers();
 
@@ -79,7 +83,7 @@ export default async function SingleProject({ params, searchParams }: Props) {
       <div className="text-primary text-2xl leading-tight">
         {project.asanaId || 'No'}
       </div>
-      {hubstaffProject && (
+      {hubstaffProject ? (
         <>
           <section className="my-10">
             <h1 className="text-xl font-bold">Hubstaff data</h1>
@@ -104,6 +108,8 @@ export default async function SingleProject({ params, searchParams }: Props) {
             </>
           )}
         </>
+      ) : (
+        <div className="my-10">{`hubstaff project with id=${project.hubstaffId} doesn't exist`}</div>
       )}
     </main>
   );
