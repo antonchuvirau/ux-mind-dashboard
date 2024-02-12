@@ -39,22 +39,20 @@ export default async function SingleProject({ params, searchParams }: Props) {
     Number(project.hubstaffId),
   );
 
-  const activities = hubstaffProject
-    ? await hubstaffClient.getActivities(
-        searchParams.startDate
-          ? new Date(String(searchParams.startDate))
-          : new Date(),
-        searchParams.endDate
-          ? new Date(String(searchParams.endDate))
-          : new Date(),
-        undefined,
-        Number(project.hubstaffId),
-      )
-    : null;
+  const activities =
+    hubstaffProject &&
+    (await hubstaffClient.getActivities(
+      searchParams.startDate
+        ? new Date(String(searchParams.startDate))
+        : new Date(),
+      searchParams.endDate
+        ? new Date(String(searchParams.endDate))
+        : new Date(),
+      undefined,
+      Number(project.hubstaffId),
+    ));
 
-  const members = activities
-    ? await hubstaffClient.getOrganizationMembers()
-    : null;
+  const members = activities && (await hubstaffClient.getOrganizationMembers());
 
   return (
     <main className="container mx-auto py-10">
