@@ -134,11 +134,7 @@ function Table<T>({
           .map((pageIndex) => (
             <div
               key={pageIndex}
-              className={`cursor-pointer px-3 ${
-                table.getState().pagination.pageIndex === pageIndex
-                  ? 'text-primary'
-                  : ''
-              }`}
+              className={`cursor-pointer px-3`}
               onClick={() => table.setPageIndex(pageIndex)}
             >
               {pageIndex + 1}

@@ -48,7 +48,7 @@ const TrackedRange = ({ activities }: Props) => {
 
   return (
     <>
-      <div className="text-primary mb-2 mt-0 text-2xl leading-tight">
+      <div className="mb-2 mt-0 text-2xl leading-tight">
         Hours: {Math.trunc(trackedTime / 3600)}
       </div>
       <DateRangePicker

@@ -24,7 +24,7 @@ const ProjectsList = ({ projects }: Props) => {
 
   return (
     <div className="mt-8">
-      <div className="text-primary mb-2 mt-0 text-5xl font-medium leading-tight">
+      <div className="mb-2 mt-0 text-5xl font-medium leading-tight">
         Hubstaff Projects
       </div>
       <Table data={projects} columns={columns} />

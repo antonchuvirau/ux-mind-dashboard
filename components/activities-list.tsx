@@ -39,7 +39,7 @@ const ActivitiesList = ({ activities, members }: Props) => {
 
   return (
     <section>
-      <h2 className="text-primary mb-2 mt-0 text-5xl font-medium leading-tight">
+      <h2 className="mb-2 mt-0 text-5xl font-medium leading-tight">
         Activities
       </h2>
       <Table data={data} columns={columns} />
