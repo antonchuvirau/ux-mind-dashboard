@@ -56,8 +56,14 @@ export default async function SingleProject({ params, searchParams }: Props) {
 
   return (
     <main className="container mx-auto py-10">
-      <div className="mb-10 mt-0 text-5xl font-medium leading-tight">
-        {project.name}
+      <div className="mb-10 mt-0 flex items-center gap-4 font-medium leading-tight">
+        <span className="text-3xl">{project.name}</span>
+        <Link
+          className="rounded-md border border-black px-3 py-2"
+          href={`/projects/${project.id}/edit`}
+        >
+          Edit
+        </Link>
       </div>
       <div className="mb-2 text-2xl font-medium leading-tight">ID:</div>
       <div className="mb-10 mt-0 text-2xl leading-tight">{project.id}</div>
