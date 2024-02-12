@@ -2,7 +2,7 @@ import { cache } from 'react';
 
 import { db } from '@/lib/db';
 
-import ProjectForm from '@/components/ui/project-form';
+import ProjectForm from '@/components/project-form';
 
 interface Props {
   params: {

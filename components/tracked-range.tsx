@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 
 import { type HubstaffActivity } from '@/hubstaff/validators';
 
-import DateRangePicker from '@/components/ui/date-range-picker';
+import DateRangePicker from '@/components/date-range-picker';
 
 import { useZodForm } from '@/hooks/use-zod-form';
 

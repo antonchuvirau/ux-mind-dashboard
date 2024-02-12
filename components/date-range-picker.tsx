@@ -14,7 +14,7 @@ import { useController } from 'react-hook-form';
 
 import { format } from 'date-fns';
 
-import Label from '@/components/ui/label';
+import Label from '@/components/label';
 
 import 'react-datepicker/dist/react-datepicker.css';
 

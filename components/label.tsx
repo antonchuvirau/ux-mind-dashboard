@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import Spinner from './spinner';
+import Spinner from '@/components/spinner';
 
 interface Props {
   name: string;

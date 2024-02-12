@@ -3,7 +3,7 @@
 import _ from 'lodash';
 import { createColumnHelper } from '@tanstack/react-table';
 
-import Table from '@/components/ui/table';
+import Table from '@/components/table';
 
 import type { HubstaffActivity, HubstaffUser } from '@/hubstaff/validators';
 

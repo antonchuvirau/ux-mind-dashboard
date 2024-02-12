@@ -4,8 +4,8 @@ import { useTransition } from 'react';
 import { useAction } from 'next-safe-action/hooks';
 import { z } from 'zod';
 
-import Button from '@/components/ui/button';
-import Input from '@/components/ui/input';
+import Button from '@/components/button';
+import Input from '@/components/input';
 
 import { useZodForm } from '@/hooks/use-zod-form';
 

@@ -5,7 +5,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 
 import { type Project } from '@prisma/client';
 
-import Table from '@/components/ui/table';
+import Table from '@/components/table';
 
 interface Props {
   projects: Project[];
