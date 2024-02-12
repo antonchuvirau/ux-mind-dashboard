@@ -7,7 +7,7 @@ import HubstaffClient from '@/hubstaff/client';
 import TrackedRange from '@/components/tracked-range';
 import ActivitiesList from '@/components/activities-list';
 
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 
 interface Props {
   params: {
@@ -17,7 +17,7 @@ interface Props {
 }
 
 const getProject = cache((id: string) => {
-  const project = prisma.project.findFirstOrThrow({
+  const project = db.project.findFirstOrThrow({
     where: { id },
   });
 

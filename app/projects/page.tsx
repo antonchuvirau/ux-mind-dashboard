@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 
 import InnerProjectsList from '@/components/inner-projects-list';
 
@@ -7,7 +7,7 @@ export const metadata = {
 };
 
 export default async function Projects() {
-  const projects = await prisma.project.findMany();
+  const projects = await db.project.findMany();
 
   return (
     <main className="container mx-auto py-10">

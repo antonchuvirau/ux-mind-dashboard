@@ -15,7 +15,7 @@ import {
   userSchema,
 } from '@/hubstaff/validators';
 
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 
 const BASE_URL = 'https://api.hubstaff.com/v2';
 
@@ -65,7 +65,7 @@ export default class HubstaffClient {
       .object({ exp: z.number() })
       .parse(jwtDecode(access.accessToken));
 
-    this.access = await prisma.hubstaffAccess.update({
+    this.access = await db.hubstaffAccess.update({
       where: { id: this.access.id },
       data: { ...access, exp },
     });
@@ -75,9 +75,9 @@ export default class HubstaffClient {
     // Get token from database if needed
     if (!this.access.accessToken) {
       // We assume only one hubstaffAccess will ever exist in DB. Maybe in future we will have more?
-      this.access = await prisma.hubstaffAccess.findFirstOrThrow().catch(() => {
+      this.access = await db.hubstaffAccess.findFirstOrThrow().catch(() => {
         // console.log('HubstaffAccess does not exist in DB, creating new one');
-        return prisma.hubstaffAccess.create({
+        return db.hubstaffAccess.create({
           data: {
             accessToken: process.env.ACCESS_TOKEN || '',
             refreshToken: process.env.REFRESH_TOKEN || '',

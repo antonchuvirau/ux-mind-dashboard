@@ -1,6 +1,6 @@
 import { cache } from 'react';
 
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 
 import ProjectForm from '@/components/ui/project-form';
 
@@ -15,7 +15,7 @@ export const metadata = {
 };
 
 const getProject = cache((id: string) => {
-  return prisma.project.findFirstOrThrow({
+  return db.project.findFirstOrThrow({
     where: { id },
   });
 });

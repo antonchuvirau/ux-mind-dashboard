@@ -5,7 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 import { action } from '@/lib/safe-action';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 
 const schema = z.object({
   id: z.string().optional(),
@@ -17,7 +17,7 @@ const schema = z.object({
 
 export const addProject = action(schema, async (data) => {
   try {
-    await prisma.project.create({
+    await db.project.create({
       data: {
         name: data.name,
         upworkId: data.upworkId,
@@ -42,7 +42,7 @@ export const editProject = action(schema, async (data) => {
       return;
     }
 
-    await prisma.project.update({
+    await db.project.update({
       where: {
         id: data.id,
       },

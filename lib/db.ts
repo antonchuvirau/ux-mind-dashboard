@@ -11,16 +11,16 @@ declare global {
   var cachedPrisma: PrismaClient; // eslint-disable-line
 }
 
-let p: PrismaClient;
+let prisma: PrismaClient;
 
 if (process.env.NODE_ENV === 'production') {
-  p = new PrismaClient();
+  prisma = new PrismaClient();
 } else {
   if (!global.cachedPrisma) {
     global.cachedPrisma = new PrismaClient();
   }
 
-  p = global.cachedPrisma;
+  prisma = global.cachedPrisma;
 }
 
-export const prisma = p;
+export const db = prisma;
