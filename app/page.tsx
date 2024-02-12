@@ -11,17 +11,17 @@ export default async function Home({
   params: { slug: string };
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const client = new HubstaffClient();
+  const hubstaffClient = new HubstaffClient();
 
-  const members = await client.getOrganizationMembers();
-  const projects = await client.getProjects();
+  const members = await hubstaffClient.getOrganizationMembers();
+  const projects = await hubstaffClient.getProjects();
 
-  /*const activities = await client.getActivities(
-    new Date('2023-07-01'),
-    new Date('2023-07-08')
-  );*/
+  // const activities = await hubstaffClient.getActivities(
+  //   new Date('2023-07-01'),
+  //   new Date('2023-07-08')
+  // );
 
-  const activities = await client.getActivities(
+  const activities = await hubstaffClient.getActivities(
     searchParams.startDate
       ? new Date(String(searchParams.startDate))
       : new Date(),

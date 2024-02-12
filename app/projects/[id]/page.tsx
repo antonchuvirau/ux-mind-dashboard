@@ -1,7 +1,6 @@
-import Link from 'next/link';
 import { cache } from 'react';
+import Link from 'next/link';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid';
-import { type Metadata } from 'next';
 
 import HubstaffClient from '@/hubstaff/client';
 
@@ -9,6 +8,13 @@ import TrackedRange from '@/components/tracked-range';
 import ActivitiesList from '@/components/activities-list';
 
 import { prisma } from '@/lib/db';
+
+interface Props {
+  params: {
+    id: string;
+  };
+  searchParams: { [key: string]: string | string[] | undefined };
+}
 
 const getProject = cache((id: string) => {
   const project = prisma.project.findFirstOrThrow({
@@ -18,14 +24,7 @@ const getProject = cache((id: string) => {
   return project;
 });
 
-interface Props {
-  params: {
-    id: string;
-  };
-  searchParams: { [key: string]: string | string[] | undefined };
-}
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: Props) {
   const project = await getProject(params.id);
 
   return { title: project.name };
@@ -34,16 +33,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function SingleProject({ params, searchParams }: Props) {
   const project = await getProject(params.id);
 
-  const client = new HubstaffClient();
+  const hubstaffClient = new HubstaffClient();
 
-  const hubstaffProject = await client
+  const hubstaffProject = await hubstaffClient
     .getProject(Number(project.hubstaffId))
     .catch((e) => {
       console.log(e);
       return null;
     });
 
-  const activities = await client.getActivities(
+  const activities = await hubstaffClient.getActivities(
     searchParams.startDate
       ? new Date(String(searchParams.startDate))
       : new Date(),
@@ -52,7 +51,7 @@ export default async function SingleProject({ params, searchParams }: Props) {
     Number(project.hubstaffId),
   );
 
-  const members = await client.getOrganizationMembers();
+  const members = await hubstaffClient.getOrganizationMembers();
 
   return (
     <main className="container mx-auto py-10">
@@ -89,13 +88,11 @@ export default async function SingleProject({ params, searchParams }: Props) {
             <h1 className="text-xl font-bold">Hubstaff data</h1>
             <p>Name: {hubstaffProject.name}</p>
             <Link
-              href={`https://app.hubstaff.com/projects/${
-                hubstaffProject.id || ''
-              }`}
-              className="mt-4 flex gap-2 underline"
               target="_blank"
+              href={`https://app.hubstaff.com/projects/${hubstaffProject.id}`}
+              className="mt-4 flex gap-2 underline"
             >
-              <ArrowTopRightOnSquareIcon className="h-6 w-6" />
+              <ArrowTopRightOnSquareIcon className="size-6" />
               Open in Hubstaff
             </Link>
           </section>

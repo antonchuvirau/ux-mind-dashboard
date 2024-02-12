@@ -52,13 +52,13 @@ const TrackedRange = ({ activities }: Props) => {
         Hours: {Math.trunc(trackedTime / 3600)}
       </div>
       <DateRangePicker
-        label={`Period`}
-        placeholderText={`Select date range`}
-        startName="start"
-        endName="end"
+        control={control}
         minDate={new Date('01-01-2023')}
         maxDate={new Date('31-12-2023')}
-        control={control}
+        label="Period"
+        placeholderText="Select date range"
+        startName="start"
+        endName="end"
         required
       />
     </>

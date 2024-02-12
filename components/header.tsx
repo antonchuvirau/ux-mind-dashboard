@@ -3,11 +3,11 @@ import Link from 'next/link';
 const Header = () => {
   return (
     <header>
-      <nav className="border-gray-200 bg-white p-4 dark:bg-gray-800">
+      <nav className="bg-gray-800 p-4">
         <div className="container mx-auto flex flex-wrap items-center justify-between">
           <Link
             href="/"
-            className="fond-semibold flex items-center text-xl text-white"
+            className="flex items-center text-xl font-bold text-white"
           >
             UXMind Dashboard
           </Link>
