@@ -35,12 +35,9 @@ export default async function SingleProject({ params, searchParams }: Props) {
 
   const hubstaffClient = new HubstaffClient();
 
-  const hubstaffProject = await hubstaffClient
-    .getProject(Number(project.hubstaffId))
-    .catch((e) => {
-      console.log(e);
-      return null;
-    });
+  const hubstaffProject = await hubstaffClient.getProject(
+    Number(project.hubstaffId),
+  );
 
   const activities = await hubstaffClient.getActivities(
     searchParams.startDate
@@ -86,10 +83,10 @@ export default async function SingleProject({ params, searchParams }: Props) {
         <>
           <section className="my-10">
             <h1 className="text-xl font-bold">Hubstaff data</h1>
-            <p>Name: {hubstaffProject.name}</p>
+            <p>Name: {hubstaffProject.project.name}</p>
             <Link
               target="_blank"
-              href={`https://app.hubstaff.com/projects/${hubstaffProject.id}`}
+              href={`https://app.hubstaff.com/projects/${hubstaffProject.project.id}`}
               className="mt-4 flex gap-2 underline"
             >
               <ArrowTopRightOnSquareIcon className="size-6" />

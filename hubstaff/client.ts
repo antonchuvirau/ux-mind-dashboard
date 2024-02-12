@@ -122,17 +122,23 @@ export default class HubstaffClient {
 
   // https://developer.hubstaff.com/docs/hubstaff_v2#!/projects/getV2ProjectsProjectId
   async getProject(id: number) {
-    const { project } = z
+    const schema = z
       .object({
         project: projectSchema,
       })
-      .parse(
-        await this.get(`projects/${id}`, {
-          next: { revalidate: 60 },
+      .or(
+        z.object({
+          code: z.string(),
+          error: z.string(),
         }),
-      );
+      )
+      .transform((data) => ('error' in data ? null : data));
 
-    return project;
+    return schema.parse(
+      await this.get(`projects/${id}`, {
+        next: { revalidate: 60 },
+      }),
+    );
   }
 
   // https://developer.hubstaff.com/docs/hubstaff_v2#!/projects/getV2OrganizationsOrganizationIdProjects
