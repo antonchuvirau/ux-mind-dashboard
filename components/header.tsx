@@ -13,17 +13,14 @@ const Header = () => {
           </Link>
           <ul className="flex items-center justify-center gap-8 font-medium">
             <li>
-              <Link
-                href="/"
-                className="lg:hover:text-primary-700 block border-b border-gray-100 py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-50 lg:border-0 lg:p-0 lg:hover:bg-transparent dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent lg:dark:hover:text-white"
-              >
+              <Link href="/" className="py-2 pl-3 pr-4 text-white lg:p-0">
                 Dashboard
               </Link>
             </li>
             <li>
               <Link
                 href="/projects"
-                className="lg:hover:text-primary-700 block border-b border-gray-100 py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-50 lg:border-0 lg:p-0 lg:hover:bg-transparent dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent lg:dark:hover:text-white"
+                className="py-2 pl-3 pr-4 text-white lg:p-0"
               >
                 Projects
               </Link>
@@ -31,7 +28,7 @@ const Header = () => {
             <li>
               <Link
                 href="/projects/create"
-                className="lg:hover:text-primary-700 block border-b border-gray-100 py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-50 lg:border-0 lg:p-0 lg:hover:bg-transparent dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent lg:dark:hover:text-white"
+                className="py-2 pl-3 pr-4 text-white lg:p-0"
               >
                 Add project
               </Link>
