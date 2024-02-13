@@ -4,8 +4,7 @@ import { useTransition } from 'react';
 import { useAction } from 'next-safe-action/hooks';
 import { z } from 'zod';
 
-import Button from '@/components/button';
-
+import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 
@@ -69,7 +68,7 @@ export default function AddProjectForm({ defaultValues }: Props) {
 
   return (
     <form
-      className="flex flex-col gap-5"
+      className="flex flex-col gap-7"
       onSubmit={handleSubmit((data) => {
         if (defaultValues) {
           const modifiedData = {
@@ -127,10 +126,10 @@ export default function AddProjectForm({ defaultValues }: Props) {
         {defaultValues
           ? editStatus === 'executing' || isPending
             ? 'Loading...'
-            : 'Edit project'
+            : 'Edit'
           : addStatus === 'executing' || isPending
             ? 'Loading...'
-            : 'Add project'}
+            : 'Add'}
       </Button>
     </form>
   );

@@ -4,6 +4,8 @@ import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid';
 
 import HubstaffClient from '@/hubstaff/client';
 
+import { Button } from '@/components/ui/button';
+
 import TrackedRange from '@/components/tracked-range';
 import ActivitiesList from '@/components/activities-list';
 
@@ -58,12 +60,9 @@ export default async function SingleProject({ params, searchParams }: Props) {
     <main className="container mx-auto py-10">
       <div className="mb-10 mt-0 flex items-center gap-4 font-medium leading-tight">
         <span className="text-3xl">{project.name}</span>
-        <Link
-          className="rounded-md border border-black px-3 py-2"
-          href={`/projects/${project.id}/edit`}
-        >
-          Edit
-        </Link>
+        <Button variant="outline" asChild>
+          <Link href={`/projects/${project.id}/edit`}>Edit</Link>
+        </Button>
       </div>
       <div className="mb-2 text-2xl font-medium leading-tight">ID:</div>
       <div className="mb-10 mt-0 text-2xl leading-tight">{project.id}</div>

@@ -14,7 +14,7 @@ import { useController } from 'react-hook-form';
 
 import { format } from 'date-fns';
 
-import Label from '@/components/label';
+import { Label } from '@/components/ui/label';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -77,8 +77,8 @@ function DateRangePicker<T extends FieldValues>({
   const endController = useController({ control, name: endName });
 
   return (
-    <div className="flex flex-col">
-      <Label name={label} required={rest.required} />
+    <div className="flex flex-col gap-2">
+      <Label>{`${label}${rest.required ? '*' : ''}`}</Label>
       <ReactDatePicker
         selected={startController.field.value as Date}
         startDate={startController.field.value as Date}
