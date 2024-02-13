@@ -2,6 +2,8 @@ import { db } from '@/lib/db';
 
 import InnerProjectsList from '@/components/inner-projects-list';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
   title: 'Projects',
 };
