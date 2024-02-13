@@ -3,6 +3,8 @@
 import { useTransition } from 'react';
 import { useAction } from 'next-safe-action/hooks';
 import { z } from 'zod';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -22,30 +24,44 @@ interface Props {
 
 const schema = z.object({
   id: z.string().optional(),
-  name: z.string().min(1, { message: 'Please enter project name' }),
+  name: z.string().min(1, { message: 'Project name is required' }),
   upworkId: z.string().nullable(),
   hubstaffId: z.string().nullable(),
   asanaId: z.string().nullable(),
 });
 
 export default function AddProjectForm({ defaultValues }: Props) {
+  const router = useRouter();
+
   const [isPending, startTransition] = useTransition();
 
   const { execute: executeAdd, status: addStatus } = useAction(addProject, {
     onSuccess: (data) => {
       if (data && 'failure' in data) {
-        console.log(data.failure);
+        toast.error(data.failure);
         return;
       }
+
+      toast.success(data.message);
+
+      startTransition(() => {
+        router.push('/projects');
+      });
     },
   });
 
   const { execute: executeEdit, status: editStatus } = useAction(editProject, {
     onSuccess: (data) => {
       if (data && 'failure' in data) {
-        console.log(data.failure);
+        toast.error(data.failure);
         return;
       }
+
+      toast.success(data.message);
+
+      startTransition(() => {
+        router.push('/projects');
+      });
     },
   });
 
@@ -74,13 +90,9 @@ export default function AddProjectForm({ defaultValues }: Props) {
             id: defaultValues?.id,
           };
 
-          startTransition(() => {
-            executeEdit(modifiedData);
-          });
+          executeEdit(modifiedData);
         } else {
-          startTransition(() => {
-            executeAdd(data);
-          });
+          executeAdd(data);
         }
       })}
     >
@@ -118,6 +130,7 @@ export default function AddProjectForm({ defaultValues }: Props) {
           !isDirty ||
           isSubmitting ||
           addStatus === 'executing' ||
+          editStatus === 'executing' ||
           isPending
         }
       >

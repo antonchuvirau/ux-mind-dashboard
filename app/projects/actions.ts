@@ -2,19 +2,20 @@
 
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
+// import { redirect } from 'next/navigation';
 
 import { action } from '@/lib/safe-action';
 import { db } from '@/lib/db';
 
 const schema = z.object({
   id: z.string().optional(),
-  name: z.string().min(1, { message: 'Please enter project name' }),
+  name: z.string().min(1, { message: 'Project name is required' }),
   upworkId: z.string().nullable(),
   hubstaffId: z.string().nullable(),
   asanaId: z.string().nullable(),
 });
 
+// https://github.com/vercel/next.js/issues/49298#issuecomment-1542055642
 export const addProject = action(schema, async (data) => {
   try {
     await db.project.create({
@@ -25,23 +26,24 @@ export const addProject = action(schema, async (data) => {
         asanaId: data.asanaId,
       },
     });
+
+    revalidatePath('/projects', 'page');
+
+    return {
+      message: 'Project was successfully added',
+    };
   } catch (e) {
     console.log(e);
 
-    return { failure: 'Error occured while adding the project!' };
+    return {
+      failure: 'Error occured while adding the project!',
+    };
   }
-
-  // https://github.com/vercel/next.js/issues/49298#issuecomment-1542055642
-  revalidatePath('/projects', 'page');
-  redirect('/projects');
 });
 
+// https://github.com/vercel/next.js/issues/49298#issuecomment-1542055642
 export const editProject = action(schema, async (data) => {
   try {
-    if (!data.name) {
-      return;
-    }
-
     await db.project.update({
       where: {
         id: data.id,
@@ -53,13 +55,17 @@ export const editProject = action(schema, async (data) => {
         asanaId: data.asanaId,
       },
     });
+
+    revalidatePath('/projects', 'page');
+
+    return {
+      message: 'Project was successfully edited',
+    };
   } catch (e) {
     console.log(e);
 
-    return { failure: 'Error occured while updating the project!' };
+    return {
+      failure: 'Error occured while updating the project!',
+    };
   }
-
-  // https://github.com/vercel/next.js/issues/49298#issuecomment-1542055642
-  revalidatePath('/projects', 'page');
-  redirect('/projects');
 });
