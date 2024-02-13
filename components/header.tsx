@@ -27,7 +27,7 @@ const Header = () => {
             </li>
             <li>
               <Link
-                href="/projects/create"
+                href="/projects/add"
                 className="py-2 pl-3 pr-4 text-white lg:p-0"
               >
                 Add project
