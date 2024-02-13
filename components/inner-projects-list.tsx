@@ -35,10 +35,8 @@ const InnerProjectsList = ({ projects }: Props) => {
   ];
 
   return (
-    <div className="mt-8">
-      <div className="mb-2 mt-0 text-5xl font-medium leading-tight">
-        Projects
-      </div>
+    <div className="flex flex-col gap-3">
+      <h2 className="text-3xl font-medium">Projects</h2>
       <Table
         data={projects}
         columns={columns}

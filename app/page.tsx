@@ -29,7 +29,7 @@ export default async function Home({
   );
 
   return (
-    <main className="container mx-auto py-10">
+    <main className="container flex flex-col gap-8 py-10">
       <TrackedRange activities={activities} />
       {activities.length > 0 && (
         <ActivitiesList activities={activities} members={members} />

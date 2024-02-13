@@ -4,32 +4,23 @@ const Header = () => {
   return (
     <header>
       <nav className="bg-zinc-800 p-4">
-        <div className="container mx-auto flex flex-wrap items-center justify-between">
-          <Link
-            href="/"
-            className="flex items-center text-xl font-bold text-white"
-          >
+        <div className="container flex items-center justify-between max-[700px]:flex-col max-[700px]:gap-3">
+          <Link href="/" className="text-xl font-bold text-white">
             UXMind Dashboard
           </Link>
-          <ul className="flex items-center justify-center gap-8 font-medium">
+          <ul className="flex gap-8">
             <li>
-              <Link href="/" className="py-2 pl-3 pr-4 text-white lg:p-0">
+              <Link href="/" className="px-4 py-2 text-white">
                 Dashboard
               </Link>
             </li>
             <li>
-              <Link
-                href="/projects"
-                className="py-2 pl-3 pr-4 text-white lg:p-0"
-              >
+              <Link href="/projects" className="px-4 py-2 text-white">
                 Projects
               </Link>
             </li>
             <li>
-              <Link
-                href="/projects/add"
-                className="py-2 pl-3 pr-4 text-white lg:p-0"
-              >
+              <Link href="/projects/add" className="px-4 py-2 text-white">
                 Add project
               </Link>
             </li>

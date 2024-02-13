@@ -57,36 +57,40 @@ export default async function SingleProject({ params, searchParams }: Props) {
   const members = activities && (await hubstaffClient.getOrganizationMembers());
 
   return (
-    <main className="container mx-auto py-10">
-      <div className="mb-10 mt-0 flex items-center gap-4 font-medium leading-tight">
+    <main className="container flex flex-col gap-10 py-10">
+      <div className="flex items-center gap-4 font-medium">
         <span className="text-3xl">{project.name}</span>
         <Button variant="outline" asChild>
           <Link href={`/projects/${project.id}/edit`}>Edit</Link>
         </Button>
       </div>
-      <div className="mb-2 text-2xl font-medium leading-tight">ID:</div>
-      <div className="mb-10 mt-0 text-2xl leading-tight">{project.id}</div>
-      <div className="mb-2 text-2xl font-medium leading-tight">Upwork ID:</div>
-      <div className="mb-10 text-2xl leading-tight">
-        {project.upworkId || 'No'}
+      <div className="flex flex-col gap-8">
+        <div className="grid gap-2">
+          <h3 className="text-3xl font-medium">ID:</h3>
+          <span className="text-xl">{project.id}</span>
+        </div>
+        <div className="grid gap-2">
+          <h3 className="text-3xl font-medium">Upwork ID:</h3>
+          <span className="text-xl">{project.upworkId || 'null'}</span>
+        </div>
+        <div className="grid gap-2">
+          <h3 className="text-3xl font-medium">Hubstaff ID:</h3>
+          <span className="text-xl">{project.hubstaffId || 'null'}</span>
+        </div>
+        <div className="grid gap-2">
+          <h3 className="text-3xl font-medium">Asana ID:</h3>
+          <span className="text-xl">{project.asanaId || 'null'}</span>
+        </div>
       </div>
-      <div className="mb-2 text-2xl font-medium leading-tight">
-        Hubstaff ID:
-      </div>
-      <div className="mb-10 mt-0 text-2xl leading-tight">
-        {project.hubstaffId || 'No'}
-      </div>
-      <div className="mb-2 text-2xl font-medium leading-tight">Asana ID:</div>
-      <div className="text-2xl leading-tight">{project.asanaId || 'No'}</div>
       {hubstaffProject ? (
         <>
-          <section className="my-10">
-            <h1 className="text-xl font-bold">Hubstaff data</h1>
+          <section>
+            <h3 className="text-3xl font-medium">Hubstaff data</h3>
             <p>Name: {hubstaffProject.project.name}</p>
             <Link
               target="_blank"
               href={`https://app.hubstaff.com/projects/${hubstaffProject.project.id}`}
-              className="mt-4 flex gap-2 underline"
+              className="flex gap-2 underline"
             >
               <ArrowTopRightOnSquareIcon className="size-6" />
               Open in Hubstaff
@@ -94,11 +98,11 @@ export default async function SingleProject({ params, searchParams }: Props) {
           </section>
           {activities && (
             <>
-              <section className="my-10">
+              <section>
                 <TrackedRange activities={activities} />
               </section>
-              {members && (
-                <section className="my-10">
+              {members && activities.length > 0 && (
+                <section>
                   <ActivitiesList activities={activities} members={members} />
                 </section>
               )}
@@ -106,7 +110,12 @@ export default async function SingleProject({ params, searchParams }: Props) {
           )}
         </>
       ) : (
-        <div className="my-10">{`hubstaff project with id=${project.hubstaffId} doesn't exist`}</div>
+        <section>
+          <span>
+            Hubstaff project with <b>{`id=${project.hubstaffId || null}`}</b>{' '}
+            doesn&apos;t exist
+          </span>
+        </section>
       )}
     </main>
   );

@@ -24,10 +24,8 @@ export default async function Edit({ params }: Props) {
   const project = await getProject(params.id);
 
   return (
-    <main className="container mx-auto py-10">
-      <div className="mb-2 mt-0 text-5xl font-medium leading-tight">
-        Edit project
-      </div>
+    <main className="container flex flex-col gap-3 py-10">
+      <h2 className="text-3xl font-medium">Edit project</h2>
       <ProjectForm defaultValues={project} />
     </main>
   );

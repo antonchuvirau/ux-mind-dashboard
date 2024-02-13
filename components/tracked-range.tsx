@@ -47,8 +47,8 @@ const TrackedRange = ({ activities }: Props) => {
   );
 
   return (
-    <>
-      <div className="mb-2 mt-0 text-2xl leading-tight">
+    <section className="flex flex-col gap-3">
+      <div className="text-3xl font-medium">
         Hours: {Math.trunc(trackedTime / 3600)}
       </div>
       <DateRangePicker
@@ -61,7 +61,7 @@ const TrackedRange = ({ activities }: Props) => {
         endName="end"
         required
       />
-    </>
+    </section>
   );
 };
 

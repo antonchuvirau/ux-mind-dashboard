@@ -6,10 +6,8 @@ export const metadata = {
 
 export default function Create() {
   return (
-    <main className="container mx-auto py-10">
-      <div className="mb-2 mt-0 text-5xl font-medium leading-tight">
-        Add project
-      </div>
+    <main className="container flex flex-col gap-3 py-10">
+      <h2 className="text-3xl font-medium">Add project</h2>
       <ProjectForm />
     </main>
   );
