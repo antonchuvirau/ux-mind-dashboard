@@ -61,7 +61,7 @@ function Table<T>({
               {headerGroup.headers.map((header) => (
                 <th
                   key={header.id}
-                  className="overflow-hidden text-ellipsis px-2 py-2"
+                  className="overflow-hidden text-ellipsis p-2"
                   {...{
                     style: {
                       maxWidth: header.column.columnDef.maxSize || undefined,

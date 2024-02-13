@@ -1,11 +1,11 @@
 import { cache } from 'react';
 import Link from 'next/link';
-import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid';
 
 import HubstaffClient from '@/hubstaff/client';
 
 import { Button } from '@/components/ui/button';
 
+import { Icons } from '@/components/icons';
 import TrackedRange from '@/components/tracked-range';
 import ActivitiesList from '@/components/activities-list';
 
@@ -90,10 +90,10 @@ export default async function SingleProject({ params, searchParams }: Props) {
             <Link
               target="_blank"
               href={`https://app.hubstaff.com/projects/${hubstaffProject.project.id}`}
-              className="flex gap-2 underline"
+              className="flex items-center gap-2"
             >
-              <ArrowTopRightOnSquareIcon className="size-6" />
-              Open in Hubstaff
+              <Icons.externalLink className="size-5" />
+              <span className="underline">Open in Hubstaff</span>
             </Link>
           </section>
           {activities && (

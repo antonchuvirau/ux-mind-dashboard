@@ -1,5 +1,6 @@
-import { Loader } from 'lucide-react';
+import { ExternalLink, Loader } from 'lucide-react';
 
 export const Icons = {
   spinner: Loader,
+  externalLink: ExternalLink,
 };
