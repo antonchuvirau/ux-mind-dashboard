@@ -37,8 +37,6 @@ export default function AddProjectForm({ defaultValues }: Props) {
         console.log(data.failure);
         return;
       }
-
-      console.log('Project was successfully added'); // fix: won't be printed
     },
   });
 
@@ -48,8 +46,6 @@ export default function AddProjectForm({ defaultValues }: Props) {
         console.log(data.failure);
         return;
       }
-
-      console.log('Project was successfully edited'); // fix: won't be printed
     },
   });
 
