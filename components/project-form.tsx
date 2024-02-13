@@ -8,6 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 
+import { Icons } from '@/components/icons';
+
 import { useZodForm } from '@/hooks/use-zod-form';
 
 import { addProject, editProject } from '@/app/projects/actions';
@@ -123,13 +125,23 @@ export default function AddProjectForm({ defaultValues }: Props) {
           isPending
         }
       >
-        {defaultValues
-          ? editStatus === 'executing' || isPending
-            ? 'Loading...'
-            : 'Edit'
-          : addStatus === 'executing' || isPending
-            ? 'Loading...'
-            : 'Add'}
+        {defaultValues ? (
+          editStatus === 'executing' || isPending ? (
+            <span className="flex items-center gap-2">
+              <Icons.spinner className="size-4 animate-spin" />
+              <span>Saving...</span>
+            </span>
+          ) : (
+            'Edit'
+          )
+        ) : addStatus === 'executing' || isPending ? (
+          <span className="flex items-center gap-2">
+            <Icons.spinner className="size-4 animate-spin" />
+            <span>Adding...</span>
+          </span>
+        ) : (
+          'Add'
+        )}
       </Button>
     </form>
   );
