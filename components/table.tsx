@@ -59,7 +59,7 @@ function Table<T>({
               {headerGroup.headers.map((header) => (
                 <th
                   key={header.id}
-                  className="text-secondary overflow-hidden text-ellipsis px-2 py-2"
+                  className="overflow-hidden text-ellipsis px-2 py-2"
                   {...{
                     style: {
                       maxWidth: header.column.columnDef.maxSize || undefined,
@@ -85,8 +85,8 @@ function Table<T>({
               <tr
                 key={row.id}
                 onClick={() => onRowClick?.(row.original)}
-                className={`cursor-pointer hover:bg-gray-200/50 ${
-                  rowIndex % 2 ? 'bg-gray-200/20' : ''
+                className={`cursor-pointer hover:bg-zinc-200/50 ${
+                  rowIndex % 2 ? 'bg-zinc-200/20' : ''
                 }`}
               >
                 {row.getVisibleCells().map((cell) => (
@@ -108,9 +108,9 @@ function Table<T>({
             ))}
         </tbody>
       </table>
-      <div className="text-secondary mt-2 flex w-full justify-center">
+      <div className="mt-2 flex w-full justify-center">
         <button
-          className="cursor-pointer px-2 disabled:cursor-not-allowed disabled:text-gray-300"
+          className="cursor-pointer px-2 disabled:cursor-not-allowed disabled:text-zinc-300"
           disabled={!table.getCanPreviousPage()}
           onClick={table.previousPage}
         >
@@ -141,7 +141,7 @@ function Table<T>({
             </div>
           ))}
         <button
-          className="cursor-pointer px-2 disabled:cursor-not-allowed disabled:text-gray-300"
+          className="cursor-pointer px-2 disabled:cursor-not-allowed disabled:text-zinc-300"
           disabled={!table.getCanNextPage()}
           onClick={table.nextPage}
         >
