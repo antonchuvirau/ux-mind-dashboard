@@ -5,7 +5,9 @@ import { useAction } from 'next-safe-action/hooks';
 import { z } from 'zod';
 
 import Button from '@/components/button';
-import Input from '@/components/input';
+
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 
 import { useZodForm } from '@/hooks/use-zod-form';
 
@@ -67,7 +69,7 @@ export default function AddProjectForm({ defaultValues }: Props) {
 
   return (
     <form
-      className="flex flex-col"
+      className="flex flex-col gap-5"
       onSubmit={handleSubmit((data) => {
         if (defaultValues) {
           const modifiedData = {
@@ -85,30 +87,33 @@ export default function AddProjectForm({ defaultValues }: Props) {
         }
       })}
     >
-      <Input
-        placeholder="Full Name"
-        name="name"
-        register={register}
-        errors={errors}
-      />
-      <Input
-        placeholder="Upwork id"
-        name="upworkId"
-        register={register}
-        errors={errors}
-      />
-      <Input
-        placeholder="Hubstaff id"
-        name="hubstaffId"
-        register={register}
-        errors={errors}
-      />
-      <Input
-        placeholder="Asana id"
-        name="asanaId"
-        register={register}
-        errors={errors}
-      />
+      <div className="grid gap-2">
+        <Label htmlFor="fullname">Project name</Label>
+        <Input id="fullname" placeholder="Project name" {...register('name')} />
+        {errors?.name && (
+          <p className="px-1 text-sm text-red-600">{errors.name.message}</p>
+        )}
+      </div>
+      <div className="grid gap-2">
+        <Label htmlFor="upworkId">Upwork Id</Label>
+        <Input
+          id="upworkId"
+          placeholder="Upwork Id"
+          {...register('upworkId')}
+        />
+      </div>
+      <div className="grid gap-2">
+        <Label htmlFor="hubstaffId">Hubstaff Id</Label>
+        <Input
+          id="hubstaffId"
+          placeholder="Hubstaff Id"
+          {...register('hubstaffId')}
+        />
+      </div>
+      <div className="grid gap-2">
+        <Label htmlFor="asanaId">Asana Id</Label>
+        <Input id="asanaId" placeholder="Asans Id" {...register('asanaId')} />
+      </div>
       <Button
         type="submit"
         disabled={
