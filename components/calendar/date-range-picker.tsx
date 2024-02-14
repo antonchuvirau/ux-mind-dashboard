@@ -38,7 +38,7 @@ type Props<T extends FieldValues> = Omit<UseControllerProps<T>, 'name'> &
 
 function CustomHeader(props: ReactDatePickerCustomHeaderProps) {
   return (
-    <div className="flex justify-between px-2">
+    <div className="flex items-center justify-between px-2">
       <button
         onClick={(event) => {
           event.preventDefault();
