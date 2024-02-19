@@ -1,4 +1,4 @@
-import ActivitiesList from '@/components/activities-list';
+import ActivitiesTable from '@/components/tables/activities/table';
 import { MembersTable } from '@/components/tables/members/table';
 import { HubstaffProjectsTable } from '@/components/tables/hubstaff-projects/table';
 import TrackedRange from '@/components/tracked-range';
@@ -32,7 +32,7 @@ export default async function Home({
     <main className="container flex flex-col gap-8 py-10">
       <TrackedRange activities={activities} />
       {activities.length > 0 && (
-        <ActivitiesList activities={activities} members={members} />
+        <ActivitiesTable activities={activities} members={members} />
       )}
       <MembersTable members={members} />
       <HubstaffProjectsTable projects={projects} />

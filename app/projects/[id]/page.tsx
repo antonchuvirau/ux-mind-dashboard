@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 
 import { Icons } from '@/components/icons';
 import TrackedRange from '@/components/tracked-range';
-import ActivitiesList from '@/components/activities-list';
+import ActivitiesList from '@/components/tables/activities/table';
 
 import { db } from '@/lib/db';
 
