@@ -22,12 +22,14 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   onRowClick?: (row: TData) => void;
+  header?: string;
 }
 
 export function DataTable<TData, TValue>({
   data,
   columns,
   onRowClick,
+  header,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -37,7 +39,8 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div>
+    <div className="flex flex-col gap-3">
+      {header && <h2 className="text-3xl font-medium">{header}</h2>}
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -90,7 +93,7 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-center space-x-2 py-4">
+      <div className="flex items-center justify-center space-x-2">
         <Button
           variant="outline"
           size="sm"

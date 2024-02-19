@@ -24,12 +24,7 @@ const ActivitiesTable = ({
     }),
   );
 
-  return (
-    <section className="flex flex-col gap-2">
-      <h2 className="text-3xl font-medium">Activities</h2>
-      <DataTable data={data} columns={columns} />
-    </section>
-  );
+  return <DataTable header="Activities" data={data} columns={columns} />;
 };
 
 export default ActivitiesTable;

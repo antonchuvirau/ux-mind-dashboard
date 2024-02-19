@@ -12,10 +12,7 @@ const HubstaffProjectsTable = ({
   projects: HubstaffProject[];
 }) => {
   return (
-    <section className="flex flex-col gap-3">
-      <h2 className="text-3xl font-medium">Hubstaff Projects</h2>
-      <DataTable data={projects} columns={columns} />
-    </section>
+    <DataTable header="Hubstaff Projects" data={projects} columns={columns} />
   );
 };
 

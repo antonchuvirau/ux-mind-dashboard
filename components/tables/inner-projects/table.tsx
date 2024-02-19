@@ -11,16 +11,14 @@ import { DataTable } from '@/components/ui/data-table';
 const InnerProjectsTable = ({ projects }: { projects: Project[] }) => {
   const router = useRouter();
 
+  // todo: prefetch like in previous table
   return (
-    <section className="flex flex-col gap-3">
-      <h2 className="text-3xl font-medium">Inner projects</h2>
-      <DataTable
-        // todo: prefetch like in previous table
-        data={projects}
-        columns={columns}
-        onRowClick={(project) => router.push(`/projects/${project.id}`)}
-      />
-    </section>
+    <DataTable
+      header="Inner projects"
+      data={projects}
+      columns={columns}
+      onRowClick={(project) => router.push(`/projects/${project.id}`)}
+    />
   );
 };
 
