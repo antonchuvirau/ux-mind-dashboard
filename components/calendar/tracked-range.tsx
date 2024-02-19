@@ -26,17 +26,20 @@ const TrackedRange = ({ activities }: Props) => {
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
-    startTransition(() => {
-      if (range && range.to && range.from) {
+    if (range && range.to && range.from) {
+      const from = range.from;
+      const to = range.to;
+
+      startTransition(() => {
         router.push(
           `?${new URLSearchParams({
-            startDate: range.from.toISOString(),
+            startDate: from.toISOString(),
             // Add an extra day because range should include the last day
-            endDate: addDays(range.to, 1).toISOString(),
+            endDate: addDays(to, 1).toISOString(),
           }).toString()}`,
         );
-      }
-    });
+      });
+    }
   }, [range, router]);
 
   const trackedHoursSum = Math.trunc(
