@@ -1,5 +1,5 @@
 import ActivitiesList from '@/components/activities-list';
-import MembersList from '@/components/members-list';
+import { MembersTable } from '@/components/tables/members/table';
 import ProjectsList from '@/components/projects-list';
 import TrackedRange from '@/components/tracked-range';
 
@@ -34,7 +34,7 @@ export default async function Home({
       {activities.length > 0 && (
         <ActivitiesList activities={activities} members={members} />
       )}
-      <MembersList members={members} />
+      <MembersTable members={members} />
       <ProjectsList projects={projects} />
     </main>
   );
