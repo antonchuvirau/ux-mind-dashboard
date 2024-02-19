@@ -18,6 +18,8 @@ import {
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 
+import { Icons } from '@/components/icons';
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -96,19 +98,19 @@ export function DataTable<TData, TValue>({
       <div className="flex items-center justify-center space-x-2">
         <Button
           variant="outline"
-          size="sm"
+          size="icon"
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
         >
-          Previous
+          <Icons.leftArrow className="size-4" />
         </Button>
         <Button
           variant="outline"
-          size="sm"
+          size="icon"
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
         >
-          Next
+          <Icons.rightArrow className="size-4" />
         </Button>
       </div>
     </div>
