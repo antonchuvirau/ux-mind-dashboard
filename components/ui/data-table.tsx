@@ -46,34 +46,7 @@ export function DataTable<TData, TValue>({
   const activePage = table.getState().pagination.pageIndex;
   const totalPages = table.getPageCount();
   const pagesRange = _.range(0, totalPages);
-
-  let buttons: JSX.Element[] = [];
-
-  if (maxVisibleButtons > totalPages) {
-    buttons = pagesRange.map((pageIndex) => (
-      <Button
-        key={pageIndex}
-        variant="outline"
-        size="icon"
-        onClick={() => table.setPageIndex(pageIndex)}
-      >
-        {pageIndex + 1}
-      </Button>
-    ));
-  } else {
-    buttons = pagesRange
-      .slice(activePage, activePage + maxVisibleButtons)
-      .map((pageIndex) => (
-        <Button
-          key={pageIndex}
-          variant="outline"
-          size="icon"
-          onClick={() => table.setPageIndex(pageIndex)}
-        >
-          {pageIndex + 1}
-        </Button>
-      ));
-  }
+  const showNextAndPrevButtons = totalPages >= maxVisibleButtons;
 
   return (
     <div className="flex flex-col gap-3">
@@ -131,7 +104,7 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       <div className="flex items-center justify-center space-x-2">
-        {totalPages >= maxVisibleButtons && (
+        {showNextAndPrevButtons && (
           <Button
             variant="outline"
             size="icon"
@@ -141,15 +114,44 @@ export function DataTable<TData, TValue>({
             <Icons.leftArrow className="size-4" />
           </Button>
         )}
-        {buttons}
-        {totalPages >= maxVisibleButtons && (
+        {maxVisibleButtons > totalPages
+          ? pagesRange.map((pageIndex) => (
+              <Button
+                key={pageIndex}
+                variant={pageIndex === activePage ? 'secondary' : 'outline'}
+                size="icon"
+                onClick={() => table.setPageIndex(pageIndex)}
+              >
+                {pageIndex + 1}
+              </Button>
+            ))
+          : pagesRange
+              .slice(
+                _.clamp(activePage, 0, totalPages - maxVisibleButtons),
+                _.clamp(
+                  activePage + maxVisibleButtons,
+                  activePage + maxVisibleButtons,
+                  totalPages,
+                ),
+              )
+              .map((pageIndex) => (
+                <Button
+                  key={pageIndex}
+                  variant={pageIndex === activePage ? 'secondary' : 'outline'}
+                  size="icon"
+                  onClick={() => table.setPageIndex(pageIndex)}
+                >
+                  {pageIndex + 1}
+                </Button>
+              ))}
+        {showNextAndPrevButtons && (
           <Button
             variant="outline"
             size="icon"
             onClick={() => table.nextPage()}
             disabled={
               !table.getCanNextPage() ||
-              activePage + maxVisibleButtons === totalPages
+              activePage + maxVisibleButtons >= totalPages
             }
           >
             <Icons.rightArrow className="size-4" />
