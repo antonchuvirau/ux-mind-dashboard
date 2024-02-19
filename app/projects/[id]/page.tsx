@@ -6,7 +6,7 @@ import HubstaffClient from '@/hubstaff/client';
 import { Button } from '@/components/ui/button';
 
 import { Icons } from '@/components/icons';
-import TrackedRange from '@/components/calendar/tracked-range';
+import TrackedRange from '@/components/tracked-range';
 import ActivitiesList from '@/components/activities-list';
 
 import { db } from '@/lib/db';
