@@ -1,22 +1,17 @@
 'use client';
 
-// import { z } from 'zod';
 import { addDays } from 'date-fns';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useTransition } from 'react';
+import { format } from 'date-fns';
+import { type DateRange } from 'react-day-picker';
+import { useState } from 'react';
 
 import { type HubstaffActivity } from '@/hubstaff/validators';
 
-// import DateRangePicker from '@/components/calendar/date-range-picker';
+import { Icons } from '@/components/icons';
 
-// import { useZodForm } from '@/hooks/use-zod-form';
-
-// import { Controller, useForm } from 'react-hook-form';
-
-import { format } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
-import { type DateRange } from 'react-day-picker';
-import { useState } from 'react';
 import { Label } from '@/components/ui/label';
 
 interface Props {
@@ -28,40 +23,21 @@ const TrackedRange = ({ activities }: Props) => {
 
   const [range, setRange] = useState<DateRange | undefined>(undefined);
 
+  const [isPending, startTransition] = useTransition();
+
   useEffect(() => {
-    if (range && range.to && range.from) {
-      router.push(
-        `?${new URLSearchParams({
-          startDate: range.from.toISOString(),
-          // Add an extra day because range should include the last day
-          endDate: addDays(range.to, 1).toISOString(),
-        }).toString()}`,
-      );
-    }
+    startTransition(() => {
+      if (range && range.to && range.from) {
+        router.push(
+          `?${new URLSearchParams({
+            startDate: range.from.toISOString(),
+            // Add an extra day because range should include the last day
+            endDate: addDays(range.to, 1).toISOString(),
+          }).toString()}`,
+        );
+      }
+    });
   }, [range, router]);
-
-  // const { control, watch } = useZodForm({
-  //   schema: z.object({
-  //     start: z.date(),
-  //     end: z.date(),
-  //   }),
-  //   mode: 'onChange',
-  // });
-
-  // const formState = watch();
-
-  // useEffect(() => {
-  //   if (formState.end) {
-  //     router.push(
-  //       '?' +
-  //         new URLSearchParams({
-  //           startDate: formState.start.toISOString(),
-  //           // Add an extra day because range should include the last day
-  //           endDate: addDays(formState.end, 1).toISOString(),
-  //         }).toString(),
-  //     );
-  //   }
-  // }, [formState, router]);
 
   const trackedHoursSum = Math.trunc(
     activities.reduce(
@@ -82,7 +58,14 @@ const TrackedRange = ({ activities }: Props) => {
     <section className="flex flex-col gap-3">
       {trackedHoursSum > 0 && (
         <div className="text-3xl font-medium">
-          {`Employees tracked time sum = ${trackedHoursSum} h.`}
+          {isPending ? (
+            <span className="flex items-center gap-2">
+              <span>Getting activities</span>
+              <Icons.spinner className="size-6 animate-spin" />
+            </span>
+          ) : (
+            `Employees tracked time sum = ${trackedHoursSum} h.`
+          )}
         </div>
       )}
       <Label>{`${selectedPeriod() ? `Selected period: ${selectedPeriod()}` : 'Select period*'}`}</Label>
@@ -93,16 +76,6 @@ const TrackedRange = ({ activities }: Props) => {
         selected={range}
         onSelect={setRange}
       />
-      {/* <DateRangePicker
-        control={control}
-        minDate={new Date('01-01-2023')}
-        maxDate={new Date('31-12-2023')}
-        label="Period"
-        placeholderText="Select date range"
-        startName="start"
-        endName="end"
-        required
-      /> */}
     </section>
   );
 };
