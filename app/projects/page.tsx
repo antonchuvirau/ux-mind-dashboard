@@ -1,6 +1,6 @@
 import { db } from '@/lib/db';
 
-import InnerProjectsList from '@/components/inner-projects-list';
+import { InnerProjectsTable } from '@/components/tables/inner-projects/table';
 
 export const dynamic = 'force-dynamic';
 
@@ -13,7 +13,7 @@ export default async function Projects() {
 
   return (
     <main className="container py-10">
-      <InnerProjectsList projects={projects} />
+      <InnerProjectsTable projects={projects} />
     </main>
   );
 }
