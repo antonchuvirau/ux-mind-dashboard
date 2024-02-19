@@ -1,6 +1,6 @@
 import ActivitiesList from '@/components/activities-list';
 import { MembersTable } from '@/components/tables/members/table';
-import ProjectsList from '@/components/projects-list';
+import { HubstaffProjectsTable } from '@/components/tables/hubstaff-projects/table';
 import TrackedRange from '@/components/tracked-range';
 
 import HubstaffClient from '@/hubstaff/client';
@@ -35,7 +35,7 @@ export default async function Home({
         <ActivitiesList activities={activities} members={members} />
       )}
       <MembersTable members={members} />
-      <ProjectsList projects={projects} />
+      <HubstaffProjectsTable projects={projects} />
     </main>
   );
 }
