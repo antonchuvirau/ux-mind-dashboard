@@ -1,5 +1,7 @@
 'use client';
 
+import _ from 'lodash';
+
 import {
   type ColumnDef,
   flexRender,
@@ -39,6 +41,39 @@ export function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
+
+  const maxVisibleButtons = 4;
+  const activePage = table.getState().pagination.pageIndex;
+  const totalPages = table.getPageCount();
+  const pagesRange = _.range(0, totalPages);
+
+  let buttons: JSX.Element[] = [];
+
+  if (maxVisibleButtons > totalPages) {
+    buttons = pagesRange.map((pageIndex) => (
+      <Button
+        key={pageIndex}
+        variant="outline"
+        size="icon"
+        onClick={() => table.setPageIndex(pageIndex)}
+      >
+        {pageIndex + 1}
+      </Button>
+    ));
+  } else {
+    buttons = pagesRange
+      .slice(activePage, activePage + maxVisibleButtons)
+      .map((pageIndex) => (
+        <Button
+          key={pageIndex}
+          variant="outline"
+          size="icon"
+          onClick={() => table.setPageIndex(pageIndex)}
+        >
+          {pageIndex + 1}
+        </Button>
+      ));
+  }
 
   return (
     <div className="flex flex-col gap-3">
@@ -96,22 +131,30 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       <div className="flex items-center justify-center space-x-2">
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          <Icons.leftArrow className="size-4" />
-        </Button>
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          <Icons.rightArrow className="size-4" />
-        </Button>
+        {totalPages >= maxVisibleButtons && (
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            <Icons.leftArrow className="size-4" />
+          </Button>
+        )}
+        {buttons}
+        {totalPages >= maxVisibleButtons && (
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => table.nextPage()}
+            disabled={
+              !table.getCanNextPage() ||
+              activePage + maxVisibleButtons === totalPages
+            }
+          >
+            <Icons.rightArrow className="size-4" />
+          </Button>
+        )}
       </div>
     </div>
   );
