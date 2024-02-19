@@ -37,6 +37,9 @@ const TrackedRange = ({ activities }: Props) => {
             // Add an extra day because range should include the last day
             endDate: addDays(to, 1).toISOString(),
           }).toString()}`,
+          {
+            scroll: false,
+          },
         );
       });
     }
@@ -59,18 +62,20 @@ const TrackedRange = ({ activities }: Props) => {
 
   return (
     <section className="flex flex-col gap-3">
-      {trackedHoursSum > 0 && (
-        <div className="text-3xl font-medium">
-          {isPending ? (
-            <span className="flex items-center gap-2">
-              <span>Getting activities</span>
-              <Icons.spinner className="size-6 animate-spin" />
-            </span>
-          ) : (
-            `Employees tracked time sum = ${trackedHoursSum} h.`
-          )}
-        </div>
-      )}
+      <div className="text-3xl font-medium">
+        {isPending ? (
+          <span className="flex items-center gap-2">
+            <span>Getting activities</span>
+            <Icons.spinner className="size-6 animate-spin" />
+          </span>
+        ) : trackedHoursSum ? (
+          <div className="flex items-center">
+            <span>{`Employees tracked time sum = ${trackedHoursSum} h.`}</span>
+          </div>
+        ) : (
+          `Employees tracked time sum will be here`
+        )}
+      </div>
       <Label>{`${selectedPeriod() ? `Selected period: ${selectedPeriod()}` : 'Select period*'}`}</Label>
       <Calendar
         className="max-w-max rounded-md border"
