@@ -2,6 +2,7 @@ import { Inter } from 'next/font/google';
 
 import Header from '@/components/header';
 
+import { ClerkProvider } from '@clerk/nextjs';
 import { Toaster } from '@/components/ui/sonner';
 
 import '@/styles/globals.css';
@@ -25,12 +26,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={`${inter.className}`}>
-        <Header />
-        {children}
-        <Toaster richColors closeButton />
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body className={`${inter.className}`}>
+          <Header />
+          {children}
+          <Toaster richColors closeButton />
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

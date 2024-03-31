@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { UserButton } from '@clerk/nextjs';
 
 const Header = () => {
   return (
@@ -23,6 +24,9 @@ const Header = () => {
               <Link href="/projects/add" className="px-4 py-2 text-white">
                 Add project
               </Link>
+            </li>
+            <li>
+              <UserButton />
             </li>
           </ul>
         </div>
